@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ══════════════════════════════════════════════════════
+             CONTACT US — Read-Only Popup (for all users)
+        ══════════════════════════════════════════════════════ -->
+
+        <record id="view_health_contact_info_popup" model="ir.ui.view">
+            <field name="name">health.contact.settings.popup</field>
+            <field name="model">health.contact.settings</field>
+            <field name="arch" type="xml">
+                <form string="Contact Us" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="text-center mb-4"
+                             style="padding:20px; background:linear-gradient(135deg,#2E86AB,#1a5f80); border-radius:10px; color:white;">
+                            <h2 style="color:white;">
+                                <i class="fa fa-phone"/> Contact Us
+                            </h2>
+                            <p style="color:#d0eaf8; margin:0;">
+                                We are here to help — reach out anytime
+                            </p>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-bottom:12px;">
+                                    <h5 style="color:#2E86AB; margin-bottom:6px;">
+                                        <i class="fa fa-hospital-o"/> Health Center Name
+                                    </h5>
+                                    <field name="center_name" nolabel="1" readonly="1"
+                                           style="font-size:1.1em; font-weight:bold;"/>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-bottom:12px;">
+                                    <h5 style="color:#2E86AB; margin-bottom:6px;">
+                                        <i class="fa fa-phone"/> Phone
+                                    </h5>
+                                    <field name="phone" nolabel="1" readonly="1"/>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-bottom:12px;">
+                                    <h5 style="color:#25D366; margin-bottom:6px;">
+                                        <i class="fa fa-mobile"/> Mobile / WhatsApp
+                                    </h5>
+                                    <field name="mobile" nolabel="1" readonly="1"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-bottom:12px;">
+                                    <h5 style="color:#2E86AB; margin-bottom:6px;">
+                                        <i class="fa fa-envelope"/> Email
+                                    </h5>
+                                    <field name="email" nolabel="1" readonly="1"/>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-bottom:12px;">
+                                    <h5 style="color:#2E86AB; margin-bottom:6px;">
+                                        <i class="fa fa-clock-o"/> Working Hours
+                                    </h5>
+                                    <field name="working_hours" nolabel="1" readonly="1"/>
+                                </div>
+                                <div style="background:#fff3cd; border-radius:8px; padding:15px; margin-bottom:12px; border:1px solid #ffc107;">
+                                    <h5 style="color:#d9534f; margin-bottom:6px;">
+                                        <i class="fa fa-ambulance"/> Emergency Line
+                                    </h5>
+                                    <field name="emergency" nolabel="1" readonly="1"
+                                           style="font-size:1.2em; font-weight:bold; color:#d9534f;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background:#f8f9fa; border-radius:8px; padding:15px; margin-top:5px;">
+                            <h5 style="color:#2E86AB; margin-bottom:6px;">
+                                <i class="fa fa-map-marker"/> Address
+                            </h5>
+                            <field name="address" nolabel="1" readonly="1"/>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button string="Close" class="btn-primary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Window action used by Contact Us menu item -->
+        <record id="action_health_contact_info" model="ir.actions.act_window">
+            <field name="name">Contact Us</field>
+            <field name="res_model">health.contact.settings</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_health_contact_info_popup"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- ══════════════════════════════════════════════════════
+             EMPLOYEE PORTAL — Edit Contact Info (Full Edit + Save Confirm)
+        ══════════════════════════════════════════════════════ -->
+
+        <record id="view_health_contact_settings_form" model="ir.ui.view">
+            <field name="name">health.contact.settings.form</field>
+            <field name="model">health.contact.settings</field>
+            <field name="arch" type="xml">
+                <form string="Contact Information Settings">
+                    <header>
+                        <button name="action_save_confirm"
+                                string="✔ Save &amp; Confirm"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="s"/>
+                        <button string="Discard Changes"
+                                class="btn-secondary"
+                                special="cancel"
+                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
+                    </header>
+                    <sheet>
+                        <div class="text-center mb-4"
+                             style="padding:15px; background:linear-gradient(135deg,#2E86AB,#1a5f80); border-radius:8px; color:white;">
+                            <h3 style="color:white; margin:0;">
+                                <i class="fa fa-cog"/> Contact Information Settings
+                            </h3>
+                            <p style="color:#d0eaf8; margin:4px 0 0 0; font-size:0.9em;">
+                                Update the health center contact details shown to all users
+                            </p>
+                        </div>
+                        <group>
+                            <group string="Health Center Identity">
+                                <field name="center_name" string="Health Center Name"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Contact Numbers">
+                                <field name="phone" string="Phone"/>
+                                <field name="mobile" string="Mobile / WhatsApp"/>
+                                <field name="emergency" string="Emergency Line"/>
+                            </group>
+                            <group string="Online Contact">
+                                <field name="email" string="Email"/>
+                                <field name="working_hours" string="Working Hours"/>
+                            </group>
+                        </group>
+                        <group string="Address">
+                            <field name="address" nolabel="1"
+                                   placeholder="Enter the full health center address..."/>
+                        </group>
+                        <div class="alert alert-info" role="alert" style="margin-top:12px;">
+                            <i class="fa fa-info-circle"/>
+                            <strong> Note:</strong>
+                            Changes saved here are immediately visible to all users
+                            in the "Contact Us" menu popup.
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--
+            Server action: opens the singleton contact settings record directly
+            in form mode — no list, no "New" button, no refresh needed.
+            The record is auto-created on first use.
+        -->
+        <record id="action_health_contact_settings_open" model="ir.actions.server">
+            <field name="name">Open Contact Information Settings</field>
+            <field name="model_id" ref="model_health_contact_settings"/>
+            <field name="state">code</field>
+            <field name="code">
+record = env['health.contact.settings'].get_or_create()
+view_id = env.ref('health_center_management.view_health_contact_settings_form').id
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Contact Information Settings',
+    'res_model': 'health.contact.settings',
+    'view_mode': 'form',
+    'res_id': record.id,
+    'view_id': view_id,
+    'target': 'current',
+    'context': {'form_view_initial_mode': 'edit'},
+}
+            </field>
+        </record>
+
+        <!-- Legacy window action kept for direct menu access if needed -->
+        <record id="action_health_contact_settings_employee" model="ir.actions.act_window">
+            <field name="name">Contact Information Settings</field>
+            <field name="res_model">health.contact.settings</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_health_contact_settings_form"/>
+            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
+        </record>
+
+    </data>
+</odoo>

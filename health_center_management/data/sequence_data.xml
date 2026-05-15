@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_health_booking" model="ir.sequence">
+            <field name="name">Health Booking Sequence</field>
+            <field name="code">health.booking</field>
+            <field name="prefix">BK/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_health_medical_record" model="ir.sequence">
+            <field name="name">Health Medical Record Sequence</field>
+            <field name="code">health.medical.record</field>
+            <field name="prefix">MR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <record id="seq_health_examination" model="ir.sequence">
+            <field name="name">Health Examination Sequence</field>
+            <field name="code">health.examination</field>
+            <field name="prefix">EX/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+</odoo>

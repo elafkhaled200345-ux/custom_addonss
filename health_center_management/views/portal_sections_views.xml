@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Employee Portal Sections List View -->
+        <record id="view_health_portal_section_employee_list" model="ir.ui.view">
+            <field name="name">health.portal.section.employee.list</field>
+            <field name="model">health.portal.section</field>
+            <field name="arch" type="xml">
+                <list string="Employee Portal" create="0" edit="0" delete="0">
+                    <field name="sequence" column_invisible="1"/>
+                    <field name="icon" widget="char" column_invisible="1"/>
+                    <field name="name" string="Section" decoration-bf="1"/>
+                    <field name="description" string="Description"/>
+                    <field name="portal_type" column_invisible="1"/>
+                    <field name="action_xml_id" column_invisible="1"/>
+                    <button name="action_open_section"
+                            type="object"
+                            string="Open"
+                            icon="fa-arrow-circle-right"
+                            class="btn-primary"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Doctor Portal Sections List View -->
+        <record id="view_health_portal_section_doctor_list" model="ir.ui.view">
+            <field name="name">health.portal.section.doctor.list</field>
+            <field name="model">health.portal.section</field>
+            <field name="arch" type="xml">
+                <list string="Doctor Portal" create="0" edit="0" delete="0">
+                    <field name="sequence" column_invisible="1"/>
+                    <field name="icon" widget="char" column_invisible="1"/>
+                    <field name="name" string="Section" decoration-bf="1"/>
+                    <field name="description" string="Description"/>
+                    <field name="portal_type" column_invisible="1"/>
+                    <field name="action_xml_id" column_invisible="1"/>
+                    <button name="action_open_section"
+                            type="object"
+                            string="Open"
+                            icon="fa-arrow-circle-right"
+                            class="btn-primary"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Action: Employee Portal Sections -->
+        <record id="action_health_employee_portal_sections" model="ir.actions.act_window">
+            <field name="name">Employee Portal</field>
+            <field name="res_model">health.portal.section</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_health_portal_section_employee_list"/>
+            <field name="domain">[('portal_type', '=', 'employee')]</field>
+            <field name="context">{'create': False}</field>
+            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
+        </record>
+
+        <!-- Action: Doctor Portal Sections -->
+        <record id="action_health_doctor_portal_sections" model="ir.actions.act_window">
+            <field name="name">Doctor Portal</field>
+            <field name="res_model">health.portal.section</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_health_portal_section_doctor_list"/>
+            <field name="domain">[('portal_type', '=', 'doctor')]</field>
+            <field name="context">{'create': False}</field>
+            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
+        </record>
+
+    </data>
+</odoo>

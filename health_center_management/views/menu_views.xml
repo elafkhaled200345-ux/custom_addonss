@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ROOT: Shows today's available clinics on click -->
+        <menuitem id="menu_health_center_root"
+                  name="Health Center"
+                  action="action_health_center_home"
+                  sequence="10"/>
+
+        <!-- PATIENT PORTAL -->
+        <menuitem id="menu_health_patient_root"
+                  name="Patient Portal"
+                  parent="menu_health_center_root"
+                  sequence="10"
+                  groups="health_center_management.group_health_patient"/>
+
+        <menuitem id="menu_health_patient_book"
+                  name="Book Your Appointment"
+                  parent="menu_health_patient_root"
+                  action="action_health_patient_book"
+                  sequence="10"
+                  groups="health_center_management.group_health_patient"/>
+
+        <menuitem id="menu_health_patient_download"
+                  name="Download Medical Report"
+                  parent="menu_health_patient_root"
+                  action="action_health_examination_patient"
+                  sequence="20"
+                  groups="health_center_management.group_health_patient"/>
+
+        <menuitem id="menu_health_patient_clinics"
+                  name="Available Clinics"
+                  parent="menu_health_patient_root"
+                  action="action_health_clinic_patient"
+                  sequence="30"
+                  groups="health_center_management.group_health_patient"/>
+
+        <!-- DOCTOR PORTAL — Password Protected -->
+        <menuitem id="menu_health_doctor_root"
+                  name="Doctor Portal"
+                  parent="menu_health_center_root"
+                  action="action_doctor_portal_login"
+                  sequence="20"
+                  groups="health_center_management.group_health_doctor"/>
+
+        <!-- EMPLOYEE PORTAL — Password Protected -->
+        <menuitem id="menu_health_employee_root"
+                  name="Employee Portal"
+                  parent="menu_health_center_root"
+                  action="action_employee_portal_login"
+                  sequence="30"
+                  groups="health_center_management.group_health_employee"/>
+
+        <!-- REPORTS PORTAL — Password Protected -->
+        <menuitem id="menu_health_reports_root"
+                  name="Reports Portal"
+                  parent="menu_health_center_root"
+                  action="action_health_report_portal_login"
+                  sequence="40"
+                  groups="health_center_management.group_health_employee,health_center_management.group_health_doctor"/>
+
+        <!-- PHARMACY AND LABORATORY -->
+        <menuitem id="menu_health_services_root"
+                  name="Additional Services"
+                  parent="menu_health_center_root"
+                  sequence="50"/>
+
+        <menuitem id="menu_health_pharmacy"
+                  name="Pharmacy"
+                  parent="menu_health_services_root"
+                  action="action_health_pharmacy"
+                  sequence="10"/>
+
+        <menuitem id="menu_health_laboratory"
+                  name="Laboratory"
+                  parent="menu_health_services_root"
+                  action="action_health_laboratory"
+                  sequence="20"/>
+
+        <!-- CONTACT US — Single entry point for all users -->
+        <menuitem id="menu_health_contact_us"
+                  name="Contact Us"
+                  parent="menu_health_center_root"
+                  action="action_health_contact_info"
+                  sequence="60"/>
+
+    </data>
+</odoo>

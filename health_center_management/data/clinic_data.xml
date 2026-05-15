@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="clinic_dentistry" model="health.clinic">
+            <field name="sequence">1</field>
+            <field name="name">dentistry</field>
+        </record>
+
+        <record id="clinic_internal_medicine" model="health.clinic">
+            <field name="sequence">2</field>
+            <field name="name">internal_medicine</field>
+        </record>
+
+        <record id="clinic_cardiology" model="health.clinic">
+            <field name="sequence">3</field>
+            <field name="name">cardiology</field>
+        </record>
+
+        <record id="clinic_surgery" model="health.clinic">
+            <field name="sequence">4</field>
+            <field name="name">surgery</field>
+        </record>
+
+        <record id="clinic_pediatrics" model="health.clinic">
+            <field name="sequence">5</field>
+            <field name="name">pediatrics</field>
+        </record>
+
+        <record id="clinic_nephrology" model="health.clinic">
+            <field name="sequence">6</field>
+            <field name="name">nephrology</field>
+        </record>
+
+        <record id="clinic_ophthalmology" model="health.clinic">
+            <field name="sequence">7</field>
+            <field name="name">ophthalmology</field>
+        </record>
+
+    </data>
+</odoo>

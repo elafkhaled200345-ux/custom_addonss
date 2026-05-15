@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ══════════════════════════════════════════════════════
+             EMPLOYEE PORTAL — Bookings (Full Edit + Save Confirm)
+        ══════════════════════════════════════════════════════ -->
+
+        <record id="view_health_booking_tree" model="ir.ui.view">
+            <field name="name">health.booking.list</field>
+            <field name="model">health.booking</field>
+            <field name="arch" type="xml">
+                <list string="Bookings">
+                    <field name="name" string="Booking Number"/>
+                    <field name="patient_id" string="Patient"/>
+                    <field name="create_date" string="Date"/>
+                    <field name="state" string="Status" widget="badge"
+                           decoration-success="state == 'active'"
+                           decoration-danger="state == 'cancelled'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_health_booking_form" model="ir.ui.view">
+            <field name="name">health.booking.form</field>
+            <field name="model">health.booking</field>
+            <field name="arch" type="xml">
+                <form string="Booking">
+                    <header>
+                        <button name="action_save_confirm"
+                                string="✔ Save &amp; Confirm"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="s"/>
+                        <button string="Discard Changes"
+                                class="btn-secondary"
+                                special="cancel"
+                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Booking Number"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Booking Details">
+                                <field name="patient_id" string="Patient"/>
+                                <field name="create_date" string="Date" readonly="1"/>
+                                <field name="state" string="Status" widget="badge"
+                                       decoration-success="state == 'active'"
+                                       decoration-danger="state == 'cancelled'"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_health_booking_search" model="ir.ui.view">
+            <field name="name">health.booking.search</field>
+            <field name="model">health.booking</field>
+            <field name="arch" type="xml">
+                <search string="Search Bookings">
+                    <field name="name" string="Booking Number"/>
+                    <field name="patient_id" string="Patient"/>
+                    <filter name="active_bookings" string="Active"
+                            domain="[('state', '=', 'active')]"/>
+                    <filter name="cancelled" string="Cancelled"
+                            domain="[('state', '=', 'cancelled')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_health_booking" model="ir.actions.act_window">
+            <field name="name">Bookings</field>
+            <field name="res_model">health.booking</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_health_booking_search"/>
+        </record>
+
+    </data>
+</odoo>

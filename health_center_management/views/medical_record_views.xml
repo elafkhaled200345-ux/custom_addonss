@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Shared list view -->
+        <record id="view_health_medical_record_tree" model="ir.ui.view">
+            <field name="name">health.medical.record.list</field>
+            <field name="model">health.medical.record</field>
+            <field name="arch" type="xml">
+                <list string="Medical Records">
+                    <field name="name" string="Record Number"/>
+                    <field name="patient_name" string="Patient Name"/>
+                    <field name="booking_number" string="Booking Number"/>
+                    <field name="create_date_manual" string="Date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ══════════════════════════════════════════════════════
+             DOCTOR PORTAL — Medical Records (+ Save Confirm)
+        ══════════════════════════════════════════════════════ -->
+
+        <record id="view_health_medical_record_form_doctor" model="ir.ui.view">
+            <field name="name">health.medical.record.form.doctor</field>
+            <field name="model">health.medical.record</field>
+            <field name="arch" type="xml">
+                <form string="Medical Record">
+                    <header>
+                        <button name="action_save_confirm"
+                                string="✔ Save &amp; Confirm"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="s"/>
+                        <button string="Discard Changes"
+                                class="btn-secondary"
+                                special="cancel"
+                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Record Number"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Patient Information">
+                                <field name="patient_id" string="Patient"/>
+                                <field name="patient_name" string="Patient Name" readonly="1"/>
+                                <field name="booking_id" string="Booking"/>
+                                <field name="booking_number" string="Booking Number" readonly="1"/>
+                                <field name="create_date_manual" string="Date"/>
+                            </group>
+                        </group>
+                        <group string="Medical Report">
+                            <field name="report" nolabel="1"
+                                   placeholder="Write the medical report here..."/>
+                        </group>
+                        <notebook>
+                            <page string="Examinations">
+                                <field name="examination_ids" editable="bottom">
+                                    <list>
+                                        <field name="name" string="Exam Number" readonly="1"/>
+                                        <field name="create_date_manual" string="Date"/>
+                                        <field name="result" string="Result"/>
+                                        <field name="prescription" string="Prescription"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ══════════════════════════════════════════════════════
+             EMPLOYEE PORTAL — Medical Records (+ Save Confirm)
+        ══════════════════════════════════════════════════════ -->
+
+        <record id="view_health_medical_record_form_employee" model="ir.ui.view">
+            <field name="name">health.medical.record.form.employee</field>
+            <field name="model">health.medical.record</field>
+            <field name="arch" type="xml">
+                <form string="Medical Record">
+                    <header>
+                        <button name="action_save_confirm"
+                                string="✔ Save &amp; Confirm"
+                                type="object"
+                                class="btn-primary"
+                                data-hotkey="s"/>
+                        <button string="Discard Changes"
+                                class="btn-secondary"
+                                special="cancel"
+                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Record Number"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+                        <group>
+                            <group string="Patient Information">
+                                <field name="patient_id" string="Patient"/>
+                                <field name="patient_name" string="Patient Name" readonly="1"/>
+                                <field name="booking_id" string="Booking"/>
+                                <field name="booking_number" string="Booking Number" readonly="1"/>
+                                <field name="create_date_manual" string="Date"/>
+                            </group>
+                        </group>
+                        <group string="Medical Report">
+                            <field name="report" nolabel="1"
+                                   placeholder="Write the medical report here..."/>
+                        </group>
+                        <notebook>
+                            <page string="Examinations">
+                                <field name="examination_ids" editable="bottom">
+                                    <list>
+                                        <field name="name" string="Exam Number" readonly="1"/>
+                                        <field name="create_date_manual" string="Date"/>
+                                        <field name="result" string="Result"/>
+                                        <field name="prescription" string="Prescription"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_health_medical_record_search" model="ir.ui.view">
+            <field name="name">health.medical.record.search</field>
+            <field name="model">health.medical.record</field>
+            <field name="arch" type="xml">
+                <search string="Search Medical Records">
+                    <field name="name" string="Record Number"/>
+                    <field name="patient_name" string="Patient Name"/>
+                    <field name="booking_number" string="Booking Number"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_health_medical_record_doctor" model="ir.actions.act_window">
+            <field name="name">Medical Records</field>
+            <field name="res_model">health.medical.record</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_medical_record_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_medical_record_form_doctor')}),
+            ]"/>
+            <field name="search_view_id" ref="view_health_medical_record_search"/>
+            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
+        </record>
+
+        <record id="action_health_medical_record_employee" model="ir.actions.act_window">
+            <field name="name">Medical Records</field>
+            <field name="res_model">health.medical.record</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_medical_record_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_medical_record_form_employee')}),
+            ]"/>
+            <field name="search_view_id" ref="view_health_medical_record_search"/>
+            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
+        </record>
+
+    </data>
+</odoo>

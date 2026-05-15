@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="report_health_examination" model="ir.actions.report">
+            <field name="name">Medical Examination Report</field>
+            <field name="model">health.examination</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">health_center_management.report_examination_template</field>
+            <field name="report_file">health_center_management.report_examination_template</field>
+            <field name="print_report_name">'Examination_' + object.name</field>
+            <field name="binding_model_id" ref="health_center_management.model_health_examination"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="report_examination_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page" style="font-family: Arial, sans-serif; padding: 20px;">
+
+                            <div style="border-bottom: 3px solid #2E86AB; padding-bottom: 15px; margin-bottom: 20px; text-align: center;">
+                                <h1 style="color: #2E86AB; margin: 0;">Health Center</h1>
+                                <h2 style="color: #555; margin: 5px 0;">Medical Examination Report</h2>
+                            </div>
+
+                            <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 8px;">Patient Information</h3>
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 6px; font-weight: bold; width: 25%;">Patient Name:</td>
+                                        <td style="padding: 6px;"><t t-esc="doc.patient_name or '-'"/></td>
+                                        <td style="padding: 6px; font-weight: bold; width: 25%;">Examination No:</td>
+                                        <td style="padding: 6px;"><t t-esc="doc.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; font-weight: bold;">Medical Record No:</td>
+                                        <td style="padding: 6px;"><t t-esc="doc.medical_record_number or '-'"/></td>
+                                        <td style="padding: 6px; font-weight: bold;">Booking Number:</td>
+                                        <td style="padding: 6px;"><t t-esc="doc.booking_number or '-'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px; font-weight: bold;">Examination Date:</td>
+                                        <td style="padding: 6px;"><t t-esc="doc.create_date_manual"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                <h3 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 8px;">Medical Report</h3>
+                                <p style="white-space: pre-wrap; min-height: 60px;"><t t-esc="doc.medical_record_report or 'No report available.'"/></p>
+                            </div>
+
+                            <div style="background: #e8f5e9; border: 1px solid #4CAF50; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                <h3 style="color: #2E7D32; border-bottom: 1px solid #4CAF50; padding-bottom: 8px;">Examination Result</h3>
+                                <p style="white-space: pre-wrap; min-height: 60px;"><t t-esc="doc.result or 'No result recorded.'"/></p>
+                            </div>
+
+                            <div style="background: #e3f2fd; border: 1px solid #2196F3; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                <h3 style="color: #1565C0; border-bottom: 1px solid #2196F3; padding-bottom: 8px;">Drug Prescription</h3>
+                                <p style="white-space: pre-wrap; min-height: 60px;"><t t-esc="doc.prescription or 'No prescription.'"/></p>
+                            </div>
+
+                            <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+                                <div style="text-align: center; width: 45%;">
+                                    <div style="border-top: 1px solid #333; padding-top: 5px;">Doctor Signature</div>
+                                </div>
+                                <div style="text-align: center; width: 45%;">
+                                    <div style="border-top: 1px solid #333; padding-top: 5px;">Health Center Stamp</div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 30px; border-top: 2px solid #2E86AB; padding-top: 10px; text-align: center; color: #888; font-size: 11px;">
+                                Generated by Health Center Management System
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
