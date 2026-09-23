@@ -1,310 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <record id="view_health_examination_list" model="ir.ui.view">
+        <field name="name">health.examination.list</field>
+        <field name="model">health.examination</field>
+        <field name="arch" type="xml">
+            <list string="Examinations / الفحوصات" default_order="id desc">
+                <field name="name"/>
+                <field name="patient_name"/>
+                <field name="clinic_id"/>
+                <field name="doctor_id"/>
+                <field name="examination_name"/>
+                <field name="examination_type"/>
+                <field name="create_date_manual" string="Date"/>
+                <field name="performed_by"/>
+                <field name="examination_fees" string="Fee (SAR)"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-warning="state == 'pending'"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             PATIENT PORTAL — Examinations (Read Only + Download)
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_examination_patient_tree" model="ir.ui.view">
-            <field name="name">health.examination.list.patient</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <list string="My Examinations" create="0" delete="0">
-                    <field name="name" string="Exam Number"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="create_date_manual" string="Date"/>
-                    <field name="result" string="Result"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_examination_patient_form" model="ir.ui.view">
-            <field name="name">health.examination.form.patient</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <form string="My Examination" create="false" delete="false">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Patient Information">
-                                <field name="patient_name" string="Patient Name" readonly="1"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                                <field name="medical_record_number" string="Record Number" readonly="1"/>
-                                <field name="create_date_manual" string="Date" readonly="1"/>
-                            </group>
+    <record id="view_health_examination_form" model="ir.ui.view">
+        <field name="name">health.examination.form</field>
+        <field name="model">health.examination</field>
+        <field name="arch" type="xml">
+            <form string="Examination / فحص طبي">
+                <header>
+                    <button name="action_mark_done" string="Mark Done / اعتماد"
+                            type="object" class="btn-primary"
+                            invisible="state == 'done'"/>
+                    <button name="action_print_examination" string="🖨 Print Report / طباعة"
+                            type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Patient / المريض">
+                            <field name="medical_record_id"/>
+                            <field name="patient_name" readonly="1"/>
+                            <field name="booking_number" readonly="1"/>
+                            <field name="clinic_id" readonly="1"/>
+                            <field name="doctor_id" readonly="1"/>
                         </group>
-                        <group string="Examination Result">
-                            <field name="result" nolabel="1" readonly="1"/>
+                        <group string="Examination / الفحص">
+                            <field name="examination_name"/>
+                            <field name="examination_type"/>
+                            <field name="create_date_manual"/>
+                            <field name="performed_by"/>
+                            <field name="examination_fees"/>
                         </group>
-                        <group string="Drug Prescription">
-                            <field name="prescription" nolabel="1" readonly="1"/>
-                        </group>
-                        <footer>
-                            <button name="action_download_report"
-                                    string="Download PDF Report"
-                                    type="object"
-                                    class="btn-primary"/>
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                    </group>
+                    <notebook>
+                        <page string="Result / النتيجة">
+                            <field name="result" placeholder="Examination result / نتيجة الفحص"/>
+                        </page>
+                        <page string="Prescription / الوصفة">
+                            <field name="prescription" placeholder="Drug prescription / الوصفة الطبية"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             DOCTOR PORTAL — Examinations (Full Add + Edit + Save Confirm)
-        ══════════════════════════════════════════════════════ -->
+    <!-- Patient view — read only -->
+    <record id="view_health_examination_patient_list" model="ir.ui.view">
+        <field name="name">health.examination.list.patient</field>
+        <field name="model">health.examination</field>
+        <field name="arch" type="xml">
+            <list string="My Examinations" create="0" delete="0" edit="0">
+                <field name="name"/>
+                <field name="booking_number"/>
+                <field name="create_date_manual" string="Date"/>
+                <field name="performed_by"/>
+                <field name="examination_name"/>
+                <field name="result"/>
+            </list>
+        </field>
+    </record>
 
-        <record id="view_health_examination_doctor_tree" model="ir.ui.view">
-            <field name="name">health.examination.list.doctor</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <list string="Examinations">
-                    <field name="name" string="Exam Number"/>
-                    <field name="patient_name" string="Patient Name"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="create_date_manual" string="Date"/>
-                    <field name="result" string="Result" optional="show"/>
-                </list>
-            </field>
-        </record>
+    <record id="action_health_examination" model="ir.actions.act_window">
+        <field name="name">Examinations / الفحوصات</field>
+        <field name="res_model">health.examination</field>
+        <field name="view_mode">list,form</field>
+    </record>
 
-        <record id="view_health_examination_doctor_form" model="ir.ui.view">
-            <field name="name">health.examination.form.doctor</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <form string="Examination">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <label for="name" string="Exam Number"/>
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Patient Information">
-                                <field name="medical_record_id" string="Medical Record"/>
-                                <field name="patient_name" string="Patient Name" readonly="1"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                                <field name="create_date_manual" string="Date"/>
-                            </group>
-                        </group>
-                        <group string="Medical Report (Reference)">
-                            <field name="medical_record_report" nolabel="1" readonly="1"/>
-                        </group>
-                        <group string="Examination Result">
-                            <field name="result" nolabel="1"
-                                   placeholder="Write examination result here..."/>
-                        </group>
-                        <group string="Drug Prescription">
-                            <field name="prescription" nolabel="1"
-                                   placeholder="Write drug prescription here..."/>
-                        </group>
-                        <footer>
-                            <button name="action_print_examination"
-                                    string="Print Report"
-                                    type="object"
-                                    class="btn-secondary"/>
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL — Examinations (Full Add + Edit + Save Confirm)
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_examination_employee_tree" model="ir.ui.view">
-            <field name="name">health.examination.list.employee</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <list string="Examinations">
-                    <field name="name" string="Exam Number"/>
-                    <field name="patient_name" string="Patient Name"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="create_date_manual" string="Date"/>
-                    <field name="result" string="Result" optional="show"/>
-                    <field name="prescription" string="Prescription" optional="show"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_examination_employee_form" model="ir.ui.view">
-            <field name="name">health.examination.form.employee</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <form string="Examination">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <label for="name" string="Exam Number"/>
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Patient Information">
-                                <field name="medical_record_id" string="Medical Record"/>
-                                <field name="patient_name" string="Patient Name" readonly="1"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                                <field name="medical_record_number" string="Record Number" readonly="1"/>
-                                <field name="create_date_manual" string="Date"/>
-                            </group>
-                        </group>
-                        <group string="Examination Result">
-                            <field name="result" nolabel="1"
-                                   placeholder="Write examination result here..."/>
-                        </group>
-                        <group string="Drug Prescription">
-                            <field name="prescription" nolabel="1"
-                                   placeholder="Write drug prescription here..."/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             PHARMACY / LABORATORY — Read Only
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_examination_pharmacy_tree" model="ir.ui.view">
-            <field name="name">health.examination.list.pharmacy</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <list string="Patient Examinations" create="0" delete="0">
-                    <field name="name" string="Exam Number"/>
-                    <field name="patient_name" string="Patient Name"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="create_date_manual" string="Date"/>
-                    <field name="result" string="Result"/>
-                    <field name="prescription" string="Prescription"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_examination_form_pharmacy" model="ir.ui.view">
-            <field name="name">health.examination.form.pharmacy</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <form string="Examination Details" create="false" delete="false">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Patient Information">
-                                <field name="patient_name" string="Patient Name" readonly="1"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                                <field name="medical_record_number" string="Record Number" readonly="1"/>
-                                <field name="create_date_manual" string="Date" readonly="1"/>
-                            </group>
-                        </group>
-                        <group string="Examination Result">
-                            <field name="result" nolabel="1" readonly="1"/>
-                        </group>
-                        <group string="Drug Prescription">
-                            <field name="prescription" nolabel="1" readonly="1"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- Search View -->
-        <record id="view_health_examination_search" model="ir.ui.view">
-            <field name="name">health.examination.search</field>
-            <field name="model">health.examination</field>
-            <field name="arch" type="xml">
-                <search string="Search Examinations">
-                    <field name="name" string="Exam Number"/>
-                    <field name="patient_name" string="Patient Name"/>
-                    <field name="booking_number" string="Booking Number"/>
-                </search>
-            </field>
-        </record>
-
-        <!-- Actions -->
-        <record id="action_health_examination_patient" model="ir.actions.act_window">
-            <field name="name">Download Medical Report</field>
-            <field name="res_model">health.examination</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_examination_patient_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_examination_patient_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_examination_search"/>
-            <field name="context">{'create': False}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_patient'))]"/>
-        </record>
-
-        <record id="action_health_examination_doctor" model="ir.actions.act_window">
-            <field name="name">Examinations</field>
-            <field name="res_model">health.examination</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_examination_doctor_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_examination_doctor_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_examination_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
-        </record>
-
-        <record id="action_health_examination_employee" model="ir.actions.act_window">
-            <field name="name">Examinations</field>
-            <field name="res_model">health.examination</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_examination_employee_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_examination_employee_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_examination_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-        <record id="action_health_pharmacy" model="ir.actions.act_window">
-            <field name="name">Pharmacy</field>
-            <field name="res_model">health.examination</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_examination_pharmacy_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_examination_form_pharmacy')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_examination_search"/>
-            <field name="context">{'create': False}</field>
-        </record>
-
-        <record id="action_health_laboratory" model="ir.actions.act_window">
-            <field name="name">Laboratory</field>
-            <field name="res_model">health.examination</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_examination_pharmacy_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_examination_form_pharmacy')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_examination_search"/>
-            <field name="context">{'create': False}</field>
-        </record>
-
-    </data>
+    <record id="action_health_examination_patient" model="ir.actions.act_window">
+        <field name="name">My Examinations / فحوصاتي</field>
+        <field name="res_model">health.examination</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_health_examination_patient_list"/>
+    </record>
 </odoo>

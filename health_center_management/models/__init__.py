@@ -4,9 +4,17 @@ from . import appointment
 from . import patient
 from . import booking
 from . import medical_record
+from . import prescription
 from . import examination
+from . import lab_test
+from . import lab_request
+from . import health_invoice
+from . import pharmacy
 from . import portal_config
+from . import employee
 from . import portal_login
+from . import portal_hub
 from . import portal_section
 from . import report_portal
 from . import contact
+from . import dashboard

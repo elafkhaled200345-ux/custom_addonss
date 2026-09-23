@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <record id="module_category_health_center" model="ir.module.category">
+        <field name="name">Health Center Management</field>
+        <field name="description">Patient Services Management System for Health Centers</field>
+        <field name="sequence">10</field>
+    </record>
 
-        <record id="module_category_health_center" model="ir.module.category">
-            <field name="name">Health Center Management</field>
-            <field name="description">Patient Services Management System for Health Centers</field>
-            <field name="sequence">10</field>
-        </record>
+    <!-- Patient Group — read-only on their own data -->
+    <record id="group_health_patient" model="res.groups">
+        <field name="name">Patient / مريض</field>
+        <field name="category_id" ref="module_category_health_center"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
 
-        <!-- Patient Group -->
-        <record id="group_health_patient" model="res.groups">
-            <field name="name">Patient</field>
-            <field name="category_id" ref="module_category_health_center"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-        </record>
+    <!-- Doctor Group — can write medical records/examinations -->
+    <record id="group_health_doctor" model="res.groups">
+        <field name="name">Doctor / طبيب</field>
+        <field name="category_id" ref="module_category_health_center"/>
+        <field name="implied_ids" eval="[(4, ref('group_health_patient'))]"/>
+    </record>
 
-        <!-- Doctor Group -->
-        <record id="group_health_doctor" model="res.groups">
-            <field name="name">Doctor</field>
-            <field name="category_id" ref="module_category_health_center"/>
-            <field name="implied_ids" eval="[(4, ref('group_health_patient'))]"/>
-        </record>
+    <!-- Employee Group — full management access -->
+    <record id="group_health_employee" model="res.groups">
+        <field name="name">Employee / موظف</field>
+        <field name="category_id" ref="module_category_health_center"/>
+        <field name="implied_ids" eval="[(4, ref('group_health_doctor'))]"/>
+    </record>
 
-        <!-- Employee Group -->
-        <record id="group_health_employee" model="res.groups">
-            <field name="name">Employee</field>
-            <field name="category_id" ref="module_category_health_center"/>
-            <field name="implied_ids" eval="[(4, ref('group_health_doctor'))]"/>
-
-            <!-- Give Administrator access automatically -->
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
-        </record>
-
-    </data>
+    <!-- Manager Group — administrator, manages employees and passwords -->
+    <record id="group_health_manager" model="res.groups">
+        <field name="name">Manager / مدير</field>
+        <field name="category_id" ref="module_category_health_center"/>
+        <field name="implied_ids" eval="[(4, ref('group_health_employee'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
 </odoo>

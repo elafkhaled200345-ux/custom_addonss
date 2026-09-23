@@ -1,416 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- Booking Report -->
+    <record id="report_health_booking" model="ir.actions.report">
+        <field name="name">Booking Confirmation / تأكيد الحجز</field>
+        <field name="model">health.booking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">health_center_management.report_booking_template</field>
+        <field name="print_report_name">'Booking_' + object.name</field>
+        <field name="binding_model_id" ref="model_health_booking"/>
+        <field name="binding_type">report</field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════════════
-             1. PATIENT LIST REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_patient_list_template">
-            <t t-call="web.html_container">
+    <template id="report_booking_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <h2 class="text-center">Patient List Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <table class="table table-sm table-bordered o_main_table">
-                            <thead style="background-color:#2E86AB; color:white;">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Patient Name</th>
-                                    <th>Phone</th>
-                                    <th>Gender</th>
-                                    <th>Clinic</th>
-                                    <th>Booking Type</th>
-                                    <th>Booking Number</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="docs" t-as="rec">
-                                    <tr>
-                                        <td><t t-esc="rec_index + 1"/></td>
-                                        <td><t t-esc="rec.name"/></td>
-                                        <td><t t-esc="rec.phone"/></td>
-                                        <td><t t-esc="dict(rec._fields['gender'].selection).get(rec.gender, '')"/></td>
-                                        <td><t t-esc="rec.clinic_id.name_display"/></td>
-                                        <td><t t-esc="dict(rec._fields['booking_type'].selection).get(rec.booking_type, '')"/></td>
-                                        <td><t t-esc="rec.booking_number or '-'"/></td>
-                                        <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state, '')"/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
+                        <div class="text-center mb-4">
+                            <h2>Booking Confirmation / تأكيد الحجز</h2>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th class="bg-light">Booking # / رقم الحجز</th><td><t t-esc="o.name"/></td></tr>
+                            <tr><th class="bg-light">Patient / المريض</th><td><t t-esc="o.patient_name"/></td></tr>
+                            <tr><th class="bg-light">Clinic / العيادة</th><td><t t-esc="o.clinic_id.name or '—'"/></td></tr>
+                            <tr><th class="bg-light">Doctor / الطبيب</th><td>Dr. <t t-esc="o.doctor_id.name or '—'"/></td></tr>
+                            <tr><th class="bg-light">Date / التاريخ</th><td><t t-esc="o.booking_date"/></td></tr>
+                            <tr><th class="bg-light">Status / الحالة</th><td><t t-esc="o.state"/></td></tr>
                         </table>
-                        <p><strong>Total Patients: </strong><t t-esc="len(docs)"/></p>
+                        <div class="text-center mt-4">
+                            <p class="text-muted">
+                                Please arrive 15 minutes before your appointment.
+                                <br/>يرجى الحضور قبل موعدك بـ ١٥ دقيقة.
+                            </p>
+                        </div>
                     </div>
                 </t>
             </t>
-        </template>
+        </t>
+    </template>
 
-        <record id="report_health_patient_list" model="ir.actions.report">
-            <field name="name">Patient List</field>
-            <field name="model">health.patient</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_patient_list_template</field>
-            <field name="report_file">health_center_management.report_patient_list_template</field>
-            <field name="binding_model_id" ref="model_health_patient"/>
-            <field name="binding_type">report</field>
-        </record>
+    <!-- Medical Record Report -->
+    <record id="report_health_medical_record" model="ir.actions.report">
+        <field name="name">Medical Record / السجل الطبي</field>
+        <field name="model">health.medical.record</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">health_center_management.report_medical_record_template</field>
+        <field name="print_report_name">'MedicalRecord_' + object.name</field>
+        <field name="binding_model_id" ref="model_health_medical_record"/>
+        <field name="binding_type">report</field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════════════
-             2. DOCTOR LIST REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_doctor_list_template">
-            <t t-call="web.html_container">
+    <template id="report_medical_record_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <h2 class="text-center">Doctor List Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <table class="table table-sm table-bordered o_main_table">
-                            <thead style="background-color:#2E86AB; color:white;">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Doctor Name</th>
-                                    <th>Clinic</th>
-                                    <th>Clinic Name</th>
-                                    <th>Active</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="docs" t-as="rec">
-                                    <tr>
-                                        <td><t t-esc="rec_index + 1"/></td>
-                                        <td><t t-esc="rec.name"/></td>
-                                        <td><t t-esc="dict(rec.clinic_id._fields['name'].selection).get(rec.clinic_id.name, '')"/></td>
-                                        <td><t t-esc="rec.clinic_name"/></td>
-                                        <td><t t-esc="'Yes' if rec.active else 'No'"/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <p><strong>Total Doctors: </strong><t t-esc="len(docs)"/></p>
-                    </div>
-                </t>
-            </t>
-        </template>
-
-        <record id="report_health_doctor_list" model="ir.actions.report">
-            <field name="name">Doctor List</field>
-            <field name="model">health.doctor</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_doctor_list_template</field>
-            <field name="report_file">health_center_management.report_doctor_list_template</field>
-            <field name="binding_model_id" ref="model_health_doctor"/>
-            <field name="binding_type">report</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             3. CLINIC & APPOINTMENTS REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_clinic_template">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <h2 class="text-center">Clinic Schedule Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <t t-foreach="docs" t-as="clinic">
-                            <div style="margin-bottom:20px; border:1px solid #ddd; padding:10px; border-radius:5px;">
-                                <h4 style="color:#2E86AB;">
-                                    <t t-esc="clinic.name_display"/>
-                                    <span class="badge" t-attf-style="background:{'#28a745' if clinic.status else '#dc3545'}; color:white; font-size:12px; margin-left:8px;">
-                                        <t t-esc="clinic.status_label"/>
-                                    </span>
-                                </h4>
-                                <p><strong>Clinic Type:</strong>
-                                    <t t-esc="dict(clinic._fields['name'].selection).get(clinic.name, '')"/>
-                                </p>
-                                <t t-if="clinic.appointment_ids">
-                                    <h5>Appointments:</h5>
-                                    <table class="table table-sm table-bordered">
-                                        <thead style="background-color:#f8f9fa;">
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Available</th>
-                                                <th>Booked Patient</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <t t-foreach="clinic.appointment_ids" t-as="appt">
-                                                <tr>
-                                                    <td><t t-esc="appt.appointment_date"/></td>
-                                                    <td><t t-esc="appt.appointment_time"/></td>
-                                                    <td><t t-esc="'Yes' if appt.is_available else 'No'"/></td>
-                                                    <td><t t-esc="appt.patient_id.name or '-'"/></td>
-                                                </tr>
-                                            </t>
-                                        </tbody>
-                                    </table>
-                                </t>
-                                <t t-if="clinic.doctor_ids">
-                                    <h5>Doctors:</h5>
-                                    <ul>
-                                        <t t-foreach="clinic.doctor_ids" t-as="doc">
-                                            <li><t t-esc="doc.name"/></li>
-                                        </t>
-                                    </ul>
-                                </t>
+                        <div class="text-center mb-3">
+                            <h2>Medical Record / السجل الطبي</h2>
+                            <h4 class="text-muted"><t t-esc="o.name"/></h4>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <tr><th class="bg-light">Patient</th><td><t t-esc="o.patient_name"/></td></tr>
+                                    <tr><th class="bg-light">Clinic</th><td><t t-esc="o.clinic_id.name"/></td></tr>
+                                    <tr><th class="bg-light">Doctor</th><td>Dr. <t t-esc="o.doctor_id.name or '—'"/></td></tr>
+                                </table>
                             </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <tr><th class="bg-light">Visit Date</th><td><t t-esc="o.create_date_manual"/></td></tr>
+                                    <tr><th class="bg-light">Follow-Up</th><td><t t-esc="o.follow_up_date or '—'"/></td></tr>
+                                    <tr><th class="bg-light">Booking #</th><td><t t-esc="o.booking_number or '—'"/></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <t t-if="o.bp or o.hr or o.temperature or o.o2_sat">
+                            <h5>Vital Signs / العلامات الحيوية</h5>
+                            <table class="table table-sm table-bordered mb-3">
+                                <tr>
+                                    <th>BP</th><td><t t-esc="o.bp or '—'"/></td>
+                                    <th>HR</th><td><t t-esc="o.hr or '—'"/> bpm</td>
+                                    <th>Temp</th><td><t t-esc="o.temperature or '—'"/> °C</td>
+                                    <th>O2</th><td><t t-esc="o.o2_sat or '—'"/>%</td>
+                                </tr>
+                            </table>
                         </t>
-                    </div>
-                </t>
-            </t>
-        </template>
-
-        <record id="report_health_clinic" model="ir.actions.report">
-            <field name="name">Clinic Schedule</field>
-            <field name="model">health.clinic</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_clinic_template</field>
-            <field name="report_file">health_center_management.report_clinic_template</field>
-            <field name="binding_model_id" ref="model_health_clinic"/>
-            <field name="binding_type">report</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             4. BOOKING LIST REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_booking_list_template">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <h2 class="text-center">Booking List Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <table class="table table-sm table-bordered o_main_table">
-                            <thead style="background-color:#2E86AB; color:white;">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Booking Number</th>
-                                    <th>Patient Name</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="docs" t-as="rec">
-                                    <tr>
-                                        <td><t t-esc="rec_index + 1"/></td>
-                                        <td><t t-esc="rec.name"/></td>
-                                        <td><t t-esc="rec.patient_id.name or '-'"/></td>
-                                        <td><t t-esc="str(rec.create_date)[:10]"/></td>
-                                        <td><t t-esc="dict(rec._fields['state'].selection).get(rec.state, '')"/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-6">
-                                <p><strong>Total Bookings: </strong><t t-esc="len(docs)"/></p>
+                        <t t-if="o.diagnosis">
+                            <h5>Diagnosis / التشخيص</h5>
+                            <div class="border p-2 mb-3"><strong t-if="o.diagnosis_code"><t t-esc="o.diagnosis_code"/> — </strong><t t-esc="o.diagnosis"/></div>
+                        </t>
+                        <t t-if="o.prescription_ids">
+                            <h5>Prescriptions / الوصفات الطبية</h5>
+                            <t t-foreach="o.prescription_ids" t-as="rx">
+                                <table class="table table-sm table-bordered mb-3">
+                                    <thead><tr><th>Medicine</th><th>Qty</th><th>Dosage</th><th>Duration</th></tr></thead>
+                                    <tbody><t t-foreach="rx.line_ids" t-as="line"><tr>
+                                        <td><t t-esc="line.medicine_id.name"/></td><td><t t-esc="line.quantity"/></td>
+                                        <td><t t-esc="line.dosage_instructions"/></td><td><t t-esc="line.duration or '—'"/></td>
+                                    </tr></t></tbody>
+                                </table>
+                            </t>
+                        </t>
+                        <t t-if="o.report">
+                            <h5>Medical Report / التقرير الطبي</h5>
+                            <div class="border p-2 mb-3"><t t-esc="o.report"/></div>
+                        </t>
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+                                <div class="border-top pt-2">Doctor's Signature</div>
                             </div>
-                            <div class="col-6">
-                                <p><strong>Active: </strong>
-                                    <t t-esc="len([r for r in docs if r.state == 'active'])"/>
-                                </p>
+                            <div class="col-6 text-center">
+                                <div class="border-top pt-2">Official Stamp</div>
                             </div>
                         </div>
                     </div>
                 </t>
             </t>
-        </template>
-
-        <record id="report_health_booking_list" model="ir.actions.report">
-            <field name="name">Booking List</field>
-            <field name="model">health.booking</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_booking_list_template</field>
-            <field name="report_file">health_center_management.report_booking_list_template</field>
-            <field name="binding_model_id" ref="model_health_booking"/>
-            <field name="binding_type">report</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             5. MEDICAL RECORD DETAILED REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_medical_record_template">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <t t-foreach="docs" t-as="rec">
-                            <div t-attf-style="{'page-break-before:always;' if rec_index > 0 else ''}">
-                                <h2 class="text-center" style="color:#2E86AB;">Medical Record</h2>
-                                <div class="row" style="border:1px solid #ddd; padding:10px; border-radius:5px; margin-bottom:15px;">
-                                    <div class="col-6">
-                                        <p><strong>Record Number:</strong> <t t-esc="rec.name"/></p>
-                                        <p><strong>Patient Name:</strong> <t t-esc="rec.patient_name"/></p>
-                                        <p><strong>Date:</strong> <t t-esc="rec.create_date_manual"/></p>
-                                    </div>
-                                    <div class="col-6">
-                                        <p><strong>Booking Number:</strong> <t t-esc="rec.booking_number or '-'"/></p>
-                                        <p><strong>Patient:</strong> <t t-esc="rec.patient_id.name"/></p>
-                                    </div>
-                                </div>
-                                <div style="border:1px solid #ddd; padding:10px; border-radius:5px; margin-bottom:15px;">
-                                    <h4>Medical Report</h4>
-                                    <p><t t-esc="rec.report or 'No report written yet.'"/></p>
-                                </div>
-                                <t t-if="rec.examination_ids">
-                                    <h4>Examinations</h4>
-                                    <table class="table table-sm table-bordered">
-                                        <thead style="background-color:#f8f9fa;">
-                                            <tr>
-                                                <th>Exam Number</th>
-                                                <th>Date</th>
-                                                <th>Result</th>
-                                                <th>Prescription</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <t t-foreach="rec.examination_ids" t-as="exam">
-                                                <tr>
-                                                    <td><t t-esc="exam.name"/></td>
-                                                    <td><t t-esc="exam.create_date_manual"/></td>
-                                                    <td><t t-esc="exam.result or '-'"/></td>
-                                                    <td><t t-esc="exam.prescription or '-'"/></td>
-                                                </tr>
-                                            </t>
-                                        </tbody>
-                                    </table>
-                                </t>
-                            </div>
-                        </t>
-                    </div>
-                </t>
-            </t>
-        </template>
-
-        <record id="report_health_medical_record" model="ir.actions.report">
-            <field name="name">Medical Record</field>
-            <field name="model">health.medical.record</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_medical_record_template</field>
-            <field name="report_file">health_center_management.report_medical_record_template</field>
-            <field name="binding_model_id" ref="model_health_medical_record"/>
-            <field name="binding_type">report</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             6. APPOINTMENT SCHEDULE REPORT
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_appointment_template">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <h2 class="text-center">Appointment Schedule Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <table class="table table-sm table-bordered o_main_table">
-                            <thead style="background-color:#2E86AB; color:white;">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Clinic</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Available</th>
-                                    <th>Booked Patient</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="docs" t-as="rec">
-                                    <tr t-attf-style="background:{'#d4edda' if rec.is_available else '#f8d7da'}">
-                                        <td><t t-esc="rec_index + 1"/></td>
-                                        <td><t t-esc="rec.clinic_id.name_display"/></td>
-                                        <td><t t-esc="rec.appointment_date"/></td>
-                                        <td><t t-esc="rec.appointment_time"/></td>
-                                        <td><t t-esc="'Available' if rec.is_available else 'Booked'"/></td>
-                                        <td><t t-esc="rec.patient_id.name or '-'"/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <p><strong>Total Appointments: </strong><t t-esc="len(docs)"/></p>
-                    </div>
-                </t>
-            </t>
-        </template>
-
-        <record id="report_health_appointment" model="ir.actions.report">
-            <field name="name">Appointment Schedule</field>
-            <field name="model">health.appointment</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_appointment_template</field>
-            <field name="report_file">health_center_management.report_appointment_template</field>
-            <field name="binding_model_id" ref="model_health_appointment"/>
-            <field name="binding_type">report</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             7. EXAMINATION LIST REPORT (All Examinations)
-        ══════════════════════════════════════════════════════════════ -->
-
-        <template id="report_examination_list_template">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <h2 class="text-center">Examinations Report</h2>
-                        <p class="text-center text-muted">
-                            Generated on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
-                        </p>
-                        <table class="table table-sm table-bordered o_main_table">
-                            <thead style="background-color:#2E86AB; color:white;">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Exam Number</th>
-                                    <th>Patient Name</th>
-                                    <th>Booking Number</th>
-                                    <th>Record Number</th>
-                                    <th>Date</th>
-                                    <th>Result</th>
-                                    <th>Prescription</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="docs" t-as="rec">
-                                    <tr>
-                                        <td><t t-esc="rec_index + 1"/></td>
-                                        <td><t t-esc="rec.name"/></td>
-                                        <td><t t-esc="rec.patient_name or '-'"/></td>
-                                        <td><t t-esc="rec.booking_number or '-'"/></td>
-                                        <td><t t-esc="rec.medical_record_number or '-'"/></td>
-                                        <td><t t-esc="rec.create_date_manual"/></td>
-                                        <td><t t-esc="rec.result or '-'"/></td>
-                                        <td><t t-esc="rec.prescription or '-'"/></td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <p><strong>Total Examinations: </strong><t t-esc="len(docs)"/></p>
-                    </div>
-                </t>
-            </t>
-        </template>
-
-        <record id="report_health_examination_list" model="ir.actions.report">
-            <field name="name">Examinations List</field>
-            <field name="model">health.examination</field>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">health_center_management.report_examination_list_template</field>
-            <field name="report_file">health_center_management.report_examination_list_template</field>
-            <field name="binding_model_id" ref="model_health_examination"/>
-            <field name="binding_type">report</field>
-        </record>
-
-    </data>
+        </t>
+    </template>
 </odoo>

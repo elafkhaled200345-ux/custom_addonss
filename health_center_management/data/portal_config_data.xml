@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
-
-        <record id="default_portal_config" model="health.portal.config">
-            <field name="name">Portal Configuration</field>
-            <field name="employee_portal_password">1234</field>
-            <field name="manager_portal_password">1234</field>
-        </record>
-
-    </data>
+<odoo noupdate="1">
+    <!-- Default portal config — password will be set via UI (hashed) -->
+    <record id="health_portal_config_default" model="health.portal.config">
+        <field name="name">Portal Configuration</field>
+    </record>
 </odoo>

@@ -1,122 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
-
-        <!-- ══ Employee Portal Sections ══ -->
-
-        <record id="section_employee_patients" model="health.portal.section">
-            <field name="sequence">1</field>
-            <field name="name">Manage Patients</field>
-            <field name="description">View and manage all patient records and bookings</field>
-            <field name="icon">fa-users</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_patient_employee</field>
-        </record>
-
-        <record id="section_employee_bookings" model="health.portal.section">
-            <field name="sequence">2</field>
-            <field name="name">Bookings</field>
-            <field name="description">View all active and cancelled bookings</field>
-            <field name="icon">fa-ticket</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_booking</field>
-        </record>
-
-        <record id="section_employee_medical_records" model="health.portal.section">
-            <field name="sequence">3</field>
-            <field name="name">Medical Records</field>
-            <field name="description">View all patient medical records</field>
-            <field name="icon">fa-file-text</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_medical_record_employee</field>
-        </record>
-
-        <record id="section_employee_examinations" model="health.portal.section">
-            <field name="sequence">4</field>
-            <field name="name">Examinations</field>
-            <field name="description">View examination results and drug prescriptions</field>
-            <field name="icon">fa-flask</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_examination_employee</field>
-        </record>
-
-        <record id="section_employee_appointments" model="health.portal.section">
-            <field name="sequence">5</field>
-            <field name="name">Manage Appointments</field>
-            <field name="description">Schedule and manage clinic appointment slots</field>
-            <field name="icon">fa-calendar</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_appointment_employee</field>
-        </record>
-
-        <record id="section_employee_clinics" model="health.portal.section">
-            <field name="sequence">6</field>
-            <field name="name">Manage Clinics</field>
-            <field name="description">Add and edit clinic information</field>
-            <field name="icon">fa-hospital-o</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_clinic_employee</field>
-        </record>
-
-        <record id="section_employee_doctors" model="health.portal.section">
-            <field name="sequence">7</field>
-            <field name="name">Manage Doctors</field>
-            <field name="description">Add and manage doctor profiles and passwords</field>
-            <field name="icon">fa-user-md</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_doctor_employee</field>
-        </record>
-
-        <record id="section_employee_portal_passwords" model="health.portal.section">
-            <field name="sequence">8</field>
-            <field name="name">Portal Access Passwords</field>
-            <field name="description">Change Employee Portal and Doctor Portal passwords</field>
-            <field name="icon">fa-lock</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_portal_config</field>
-        </record>
-
-        <!--
-            Contact Information Settings — uses a SERVER ACTION so it opens
-            the singleton form directly with no empty list / no "New" button.
-        -->
-        <record id="section_employee_contact_settings" model="health.portal.section">
-            <field name="sequence">9</field>
-            <field name="name">Contact Information Settings</field>
-            <field name="description">Update phone, email, WhatsApp, address and working hours shown to all users</field>
-            <field name="icon">fa-phone</field>
-            <field name="portal_type">employee</field>
-            <field name="action_xml_id">health_center_management.action_health_contact_settings_open</field>
-        </record>
-
-        <!-- ══ Doctor Portal Sections ══ -->
-
-        <record id="section_doctor_patients" model="health.portal.section">
-            <field name="sequence">1</field>
-            <field name="name">My Clinic Patients</field>
-            <field name="description">View patients assigned to your clinic</field>
-            <field name="icon">fa-users</field>
-            <field name="portal_type">doctor</field>
-            <field name="action_xml_id">health_center_management.action_health_patient_doctor</field>
-        </record>
-
-        <record id="section_doctor_medical_records" model="health.portal.section">
-            <field name="sequence">2</field>
-            <field name="name">Medical Records</field>
-            <field name="description">Write and manage patient medical reports</field>
-            <field name="icon">fa-file-text</field>
-            <field name="portal_type">doctor</field>
-            <field name="action_xml_id">health_center_management.action_health_medical_record_doctor</field>
-        </record>
-
-        <record id="section_doctor_examinations" model="health.portal.section">
-            <field name="sequence">3</field>
-            <field name="name">Examinations</field>
-            <field name="description">Add examination results and drug prescriptions</field>
-            <field name="icon">fa-flask</field>
-            <field name="portal_type">doctor</field>
-            <field name="action_xml_id">health_center_management.action_health_examination_doctor</field>
-        </record>
-
-    </data>
+<odoo noupdate="1">
+    <!-- Employee Portal Sections -->
+    <record id="portal_section_patients" model="health.portal.section">
+        <field name="sequence">1</field>
+        <field name="name">Patients / المرضى</field>
+        <field name="portal_type">employee</field>
+        <field name="icon">fa-user</field>
+    </record>
+    <record id="portal_section_bookings" model="health.portal.section">
+        <field name="sequence">2</field>
+        <field name="name">Bookings / الحجوزات</field>
+        <field name="portal_type">employee</field>
+        <field name="icon">fa-calendar</field>
+    </record>
+    <record id="portal_section_invoices" model="health.portal.section">
+        <field name="sequence">3</field>
+        <field name="name">Invoices / الفواتير</field>
+        <field name="portal_type">employee</field>
+        <field name="icon">fa-file-text</field>
+    </record>
+    <record id="portal_section_pharmacy" model="health.portal.section">
+        <field name="sequence">4</field>
+        <field name="name">Pharmacy / الصيدلية</field>
+        <field name="portal_type">employee</field>
+        <field name="icon">fa-medkit</field>
+    </record>
+    <!-- Doctor Portal Sections -->
+    <record id="portal_section_doctor_records" model="health.portal.section">
+        <field name="sequence">1</field>
+        <field name="name">Medical Records / السجلات الطبية</field>
+        <field name="portal_type">doctor</field>
+        <field name="icon">fa-stethoscope</field>
+    </record>
+    <record id="portal_section_doctor_examinations" model="health.portal.section">
+        <field name="sequence">2</field>
+        <field name="name">Examinations / الفحوصات</field>
+        <field name="portal_type">doctor</field>
+        <field name="icon">fa-heartbeat</field>
+    </record>
+    <record id="portal_section_doctor_lab" model="health.portal.section">
+        <field name="sequence">3</field>
+        <field name="name">Lab Requests / طلبات المختبر</field>
+        <field name="portal_type">doctor</field>
+        <field name="icon">fa-flask</field>
+    </record>
 </odoo>

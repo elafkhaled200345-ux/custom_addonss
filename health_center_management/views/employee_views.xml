@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_employee_list" model="ir.ui.view">
+        <field name="name">health.employee.list</field>
+        <field name="model">health.employee</field>
+        <field name="arch" type="xml">
+            <list string="Employees / الموظفون" default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="role"/>
+                <field name="job_title"/>
+                <field name="department"/>
+                <field name="clinic_id"/>
+                <field name="phone"/>
+                <field name="password_status" string="Password / كلمة المرور"/>
+                <field name="active" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_health_employee_form" model="ir.ui.view">
+        <field name="name">health.employee.form</field>
+        <field name="model">health.employee</field>
+        <field name="arch" type="xml">
+            <form string="Employee / موظف">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Employee Name / اسم الموظف"/></h1>
+                        <h3 class="text-muted">
+                            <field name="job_title" placeholder="Job Title / المسمى الوظيفي"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Employee Info / معلومات الموظف">
+                            <field name="role"/>
+                            <field name="department"/>
+                            <field name="hire_date"/>
+                            <field name="national_id"/>
+                            <field name="user_id"/>
+                            <field name="clinic_id"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Contact / التواصل">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="signature" widget="image"/>
+                        </group>
+                    </group>
+                    <group string="Portal Password / كلمة مرور البوابة"
+                           groups="health_center_management.group_health_manager">
+                        <field name="password_status" readonly="1"
+                               string="Current Status / الحالة الحالية"/>
+                        <field name="password_set" password="True"
+                               placeholder="اكتب كلمة مرور جديدة (4 أحرف على الأقل)"/>
+                    </group>
+                    <group string="Notes / ملاحظات">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_health_employee" model="ir.actions.act_window">
+        <field name="name">Employees / الموظفون</field>
+        <field name="res_model">health.employee</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

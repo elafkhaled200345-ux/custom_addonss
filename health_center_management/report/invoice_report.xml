@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_health_invoice" model="ir.actions.report">
+        <field name="name">Health Invoice / فاتورة صحية</field>
+        <field name="model">health.invoice</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">health_center_management.report_invoice_template</field>
+        <field name="print_report_name">'Invoice_' + object.name</field>
+        <field name="binding_model_id" ref="model_health_invoice"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_invoice_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>Health Invoice / فاتورة صحية</h2>
+                            <h3><t t-esc="o.name"/></h3>
+                            <span t-att-class="'badge ' + ('bg-success' if o.invoice_status == 'paid' else 'bg-warning text-dark')">
+                                <t t-esc="o.invoice_status.upper()"/>
+                            </span>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h6>Billed To / فاتورة إلى</h6>
+                                <p>
+                                    <strong><t t-esc="o.patient_name"/></strong><br/>
+                                    <t t-esc="o.clinic_id.name or ''"/><br/>
+                                    <t t-if="o.insurance_number">
+                                        Insurance: <t t-esc="o.insurance_number"/>
+                                    </t>
+                                </p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h6>Invoice Details / تفاصيل الفاتورة</h6>
+                                <p>
+                                    Date: <t t-esc="o.invoice_date"/><br/>
+                                    Payment: <t t-esc="o.payment_method or '—'"/>
+                                    <t t-if="o.transaction_number">
+                                        <br/>Ref: <t t-esc="o.transaction_number"/>
+                                    </t>
+                                </p>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Description / البند</th>
+                                    <th class="text-end">Amount / المبلغ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="o.consultation_fee">
+                                    <tr>
+                                        <td>Consultation Fee / رسوم الكشف</td>
+                                        <td class="text-end"><t t-esc="'%.2f' % o.consultation_fee"/></td>
+                                    </tr>
+                                </t>
+                                <t t-if="o.examination_fee">
+                                    <tr>
+                                        <td>Examination Fee / رسوم الفحص</td>
+                                        <td class="text-end"><t t-esc="'%.2f' % o.examination_fee"/></td>
+                                    </tr>
+                                </t>
+                                <t t-if="o.discount">
+                                    <tr>
+                                        <td>Discount / خصم (<t t-esc="o.discount"/>%)</td>
+                                        <td class="text-end text-danger">
+                                            -<t t-esc="'%.2f' % ((o.consultation_fee + o.examination_fee) * o.discount / 100)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="o.tax_amount">
+                                    <tr><td>Tax / الضريبة (<t t-esc="o.tax"/>%)</td><td class="text-end"><t t-esc="'%.2f' % o.tax_amount"/></td></tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-dark">
+                                    <th>Total / الإجمالي</th>
+                                    <th class="text-end"><t t-esc="'%.2f' % o.total_amount"/> <t t-esc="o.currency_id.name"/></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <table class="table table-sm table-bordered mt-3">
+                            <tr><th>Amount Paid / المدفوع</th><td><t t-esc="'%.2f' % o.amount_paid"/> <t t-esc="o.currency_id.name"/></td></tr>
+                            <tr><th>Remaining / المتبقي</th><td><t t-esc="'%.2f' % o.remaining_balance"/> <t t-esc="o.currency_id.name"/></td></tr>
+                            <tr t-if="o.receipt_number"><th>Receipt / الإيصال</th><td><t t-esc="o.receipt_number"/></td></tr>
+                            <tr t-if="o.payment_date"><th>Payment Date / تاريخ الدفع</th><td><t t-esc="o.payment_date"/></td></tr>
+                        </table>
+
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+                                <div class="border-top pt-2">Patient Signature / توقيع المريض</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="border-top pt-2">Cashier / الكاشير</div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

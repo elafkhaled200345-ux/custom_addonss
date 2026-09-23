@@ -1,57 +1,96 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>نظام إدارة خدمات المرضى في المراكز الصحية</title>
+    <meta charset="UTF-8"/>
+    <title>Health Center Management</title>
     <style>
-        body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
-        h1 { color: #2E86AB; }
-        h2 { color: #555; border-bottom: 2px solid #2E86AB; padding-bottom: 5px; }
-        ul { line-height: 2; }
-        .badge { background: #2E86AB; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-        .badge-green { background: #4CAF50; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 24px;
+            color: #343a40;
+            max-width: 860px;
+        }
+        h1 { color: #2c7be5; margin-bottom: 4px; }
+        .subtitle { color: #6c757d; font-size: 15px; margin-bottom: 28px; }
+        h3 {
+            color: #2c7be5;
+            border-bottom: 2px solid #dce8fc;
+            padding-bottom: 6px;
+            margin-top: 24px;
+        }
+        .feature {
+            margin: 6px 0;
+            padding: 7px 14px;
+            background: #f8f9fa;
+            border-left: 4px solid #2c7be5;
+            border-radius: 0 4px 4px 0;
+        }
+        .models {
+            background: #f0f4ff;
+            border: 1px solid #cddcfa;
+            border-radius: 6px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.8;
+        }
     </style>
 </head>
 <body>
-    <h1>🏥 نظام إدارة خدمات المرضى في المراكز الصحية</h1>
-    <p>نظام متكامل لإدارة خدمات المرضى في المراكز الصحية مبني على منصة أودو 18</p>
 
-    <h2>الجداول الرئيسية</h2>
-    <ul>
-        <li>📋 <strong>جدول المريض</strong> — حجز المواعيد ومتابعة البيانات</li>
-        <li>🏨 <strong>جدول العيادات</strong> — إدارة عيادات المركز (أسنان، باطنية، قلب، جراحة، أطفال، كلى، عيون)</li>
-        <li>👨‍⚕️ <strong>جدول الأطباء</strong> — إدارة بيانات الأطباء</li>
-        <li>🗓️ <strong>جدول المواعيد</strong> — جدولة أوقات المواعيد المتاحة</li>
-        <li>🔢 <strong>جدول الحجز</strong> — رقم حجز فريد لكل مريض</li>
-        <li>📁 <strong>جدول السجلات الطبية</strong> — السجل الطبي لكل مريض</li>
-        <li>🔬 <strong>جدول الفحوصات</strong> — نتائج الفحوصات وروشتة الدواء</li>
-    </ul>
+    <h1>🏥 Health Center Management</h1>
+    <p class="subtitle">A fully professional patient services management system for Odoo 18.</p>
 
-    <h2>الصلاحيات</h2>
-    <ul>
-        <li>🧑 <span class="badge">مريض</span> — حجز موعد، عرض التقرير، إلغاء الحجز</li>
-        <li>👨‍⚕️ <span class="badge">طبيب</span> — عرض مرضى عيادته، كتابة التقارير والفحوصات</li>
-        <li>👔 <span class="badge">موظف</span> — إدارة كاملة لجميع البيانات</li>
-    </ul>
+    <h3>🔐 Security</h3>
+    <div class="feature">✅ Passwords hashed using bcrypt (werkzeug.security) — no plain text storage</div>
+    <div class="feature">✅ Record-level rules (ir.rule) — patients see only their own data</div>
+    <div class="feature">✅ Minimal use of sudo() — only where strictly necessary</div>
+    <div class="feature">✅ Doctor portal session managed without ir.config_parameter</div>
 
-    <h2>حماية البوابات بكلمة مرور</h2>
-    <ul>
-        <li>🔐 <span class="badge-green">بوابة الموظف</span> — محمية بكلمة مرور يتم تغييرها من الإعدادات</li>
-        <li>🔐 <span class="badge-green">بوابة المدير</span> — محمية بكلمة مرور يتم تغييرها من الإعدادات</li>
-        <li>⚙️ كلمة المرور الافتراضية: <strong>1234</strong> — قم بتغييرها من Health Center &gt; Settings &gt; Portal Access Passwords</li>
-    </ul>
+    <h3>🏗️ Architecture</h3>
+    <div class="feature">✅ All major models inherit mail.thread + mail.activity.mixin (Chatter &amp; Activities)</div>
+    <div class="feature">✅ Clinic name is a free Char field — supports any specialty without code changes</div>
+    <div class="feature">✅ Lab tests use One2many lines (health.lab.request.line) — fully dynamic</div>
 
-    <h2>الخدمات الإضافية</h2>
-    <ul>
-        <li>💊 الصيدلية — عرض روشتة الدواء برقم الحجز</li>
-        <li>🔬 المعمل — عرض نتائج الفحوصات برقم الحجز</li>
-    </ul>
+    <h3>📊 Dashboard</h3>
+    <div class="feature">✅ Today's appointments, patients, and revenue at a glance</div>
+    <div class="feature">✅ Total statistics: patients, bookings, revenue, pending invoices</div>
+    <div class="feature">✅ Low-stock medicine alerts</div>
 
-    <h2>تعليمات التثبيت</h2>
-    <ul>
-        <li>ثبّت الموديول أو قم بعمل Upgrade إذا كان مثبتاً مسبقاً</li>
-        <li>بعد التثبيت، يتم إضافة المسؤول تلقائياً إلى مجموعة الموظف</li>
-        <li>قم بتغيير كلمات المرور من: Health Center → Settings → Portal Access Passwords</li>
-    </ul>
+    <h3>📅 Calendar &amp; Kanban Views</h3>
+    <div class="feature">✅ Calendar view for appointments (day / week / month)</div>
+    <div class="feature">✅ Kanban views for patients, appointments, and bookings</div>
+
+    <h3>💊 Pharmacy Module</h3>
+    <div class="feature">✅ Medicine catalogue with stock management</div>
+    <div class="feature">✅ Dispense orders with automatic stock deduction</div>
+    <div class="feature">✅ Low-stock alerts with configurable thresholds</div>
+
+    <h3>💰 Invoicing</h3>
+    <div class="feature">✅ Insurance payment method support</div>
+    <div class="feature">✅ Discount field on invoices</div>
+    <div class="feature">✅ Credit card payment option</div>
+    <div class="feature">✅ Printable invoice PDF report</div>
+
+    <h3>🔬 Laboratory Requests</h3>
+    <div class="feature">✅ Dynamic test lines — no more Boolean fields per test</div>
+    <div class="feature">✅ Master test catalogue (health.lab.test.type)</div>
+    <div class="feature">✅ State workflow: Draft → Sent → Partial → Done</div>
+
+    <h3>🏥 Medical Records</h3>
+    <div class="feature">✅ BMI auto-calculation from weight and height</div>
+    <div class="feature">✅ Structured vital signs: BP, HR, Temperature, O₂ Saturation, Weight, Height</div>
+    <div class="feature">✅ One-click Follow-Up booking creation from any record</div>
+
+    <h3>📋 Models</h3>
+    <div class="models">
+        health.clinic · health.doctor · health.appointment · health.patient · health.booking ·
+        health.medical.record · health.examination · health.lab.test.type · health.lab.request ·
+        health.lab.request.line · health.invoice · health.medicine · health.pharmacy.dispense ·
+        health.pharmacy.dispense.line · health.portal.config · health.portal.login ·
+        health.portal.section · health.report.portal.login · health.report.hub ·
+        health.contact.settings · health.dashboard
+    </div>
+
 </body>
 </html>

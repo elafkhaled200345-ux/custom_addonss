@@ -1,70 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- ══════════════════════════════════════════════════
+         EMPLOYEE HUB — landing page after employee login
+    ══════════════════════════════════════════════════ -->
+    <record id="view_health_employee_hub_form" model="ir.ui.view">
+        <field name="name">health.employee.hub.form</field>
+        <field name="model">health.employee.hub</field>
+        <field name="arch" type="xml">
+            <form string="Employee Portal / بوابة الموظف"
+                  create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2>👤 Employee Portal / بوابة الموظف</h2>
+                        <p class="text-muted">اختر القسم الذي تريد الوصول إليه</p>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-4 mb-3">
+                            <button name="action_patients" type="object"
+                                    class="btn btn-primary btn-lg w-100 py-4">
+                                <i class="fa fa-users fa-2x d-block mb-2"/>
+                                Patients / المرضى
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_bookings" type="object"
+                                    class="btn btn-success btn-lg w-100 py-4">
+                                <i class="fa fa-calendar-check-o fa-2x d-block mb-2"/>
+                                Bookings / الحجوزات
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_appointments" type="object"
+                                    class="btn btn-info btn-lg w-100 py-4">
+                                <i class="fa fa-calendar fa-2x d-block mb-2"/>
+                                Appointments / المواعيد
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_invoices" type="object"
+                                    class="btn btn-warning btn-lg w-100 py-4">
+                                <i class="fa fa-file-text-o fa-2x d-block mb-2"/>
+                                Invoices / الفواتير
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_pharmacy" type="object"
+                                    class="btn btn-danger btn-lg w-100 py-4">
+                                <i class="fa fa-medkit fa-2x d-block mb-2"/>
+                                Pharmacy / الصيدلية
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_lab_requests" type="object"
+                                    class="btn btn-secondary btn-lg w-100 py-4">
+                                <i class="fa fa-flask fa-2x d-block mb-2"/>
+                                Lab Requests / المختبر
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_medical_records" type="object"
+                                    class="btn btn-dark btn-lg w-100 py-4">
+                                <i class="fa fa-stethoscope fa-2x d-block mb-2"/>
+                                Medical Records / السجلات
+                            </button>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <!-- Employee Portal Sections List View -->
-        <record id="view_health_portal_section_employee_list" model="ir.ui.view">
-            <field name="name">health.portal.section.employee.list</field>
-            <field name="model">health.portal.section</field>
-            <field name="arch" type="xml">
-                <list string="Employee Portal" create="0" edit="0" delete="0">
-                    <field name="sequence" column_invisible="1"/>
-                    <field name="icon" widget="char" column_invisible="1"/>
-                    <field name="name" string="Section" decoration-bf="1"/>
-                    <field name="description" string="Description"/>
-                    <field name="portal_type" column_invisible="1"/>
-                    <field name="action_xml_id" column_invisible="1"/>
-                    <button name="action_open_section"
-                            type="object"
-                            string="Open"
-                            icon="fa-arrow-circle-right"
-                            class="btn-primary"/>
-                </list>
-            </field>
-        </record>
+    <!-- ══════════════════════════════════════════════════
+         DOCTOR HUB — landing page after doctor login
+    ══════════════════════════════════════════════════ -->
+    <record id="view_health_doctor_hub_form" model="ir.ui.view">
+        <field name="name">health.doctor.hub.form</field>
+        <field name="model">health.doctor.hub</field>
+        <field name="arch" type="xml">
+            <form string="Doctor Portal / بوابة الطبيب"
+                  create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="text-center mb-2">
+                        <h2>🩺 Doctor Portal / بوابة الطبيب</h2>
+                        <h4 class="text-muted">
+                            Dr. <field name="doctor_id" readonly="1" nolabel="1"/>
+                            — <field name="clinic_id" readonly="1" nolabel="1"/>
+                        </h4>
+                        <p class="text-muted">اختر القسم الذي تريد الوصول إليه</p>
+                    </div>
+                    <div class="row text-center mt-3">
+                        <div class="col-4 mb-3">
+                            <button name="action_patients" type="object"
+                                    class="btn btn-primary btn-lg w-100 py-4">
+                                <i class="fa fa-users fa-2x d-block mb-2"/>
+                                Patients / المرضى
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_appointments" type="object"
+                                    class="btn btn-info btn-lg w-100 py-4">
+                                <i class="fa fa-calendar fa-2x d-block mb-2"/>
+                                My Appointments / مواعيدي
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_medical_records" type="object"
+                                    class="btn btn-success btn-lg w-100 py-4">
+                                <i class="fa fa-stethoscope fa-2x d-block mb-2"/>
+                                Medical Records / السجلات الطبية
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_examinations" type="object"
+                                    class="btn btn-warning btn-lg w-100 py-4">
+                                <i class="fa fa-heartbeat fa-2x d-block mb-2"/>
+                                Examinations / الفحوصات
+                            </button>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <button name="action_lab_requests" type="object"
+                                    class="btn btn-secondary btn-lg w-100 py-4">
+                                <i class="fa fa-flask fa-2x d-block mb-2"/>
+                                Lab Requests / المختبر
+                            </button>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <!-- Doctor Portal Sections List View -->
-        <record id="view_health_portal_section_doctor_list" model="ir.ui.view">
-            <field name="name">health.portal.section.doctor.list</field>
-            <field name="model">health.portal.section</field>
-            <field name="arch" type="xml">
-                <list string="Doctor Portal" create="0" edit="0" delete="0">
-                    <field name="sequence" column_invisible="1"/>
-                    <field name="icon" widget="char" column_invisible="1"/>
-                    <field name="name" string="Section" decoration-bf="1"/>
-                    <field name="description" string="Description"/>
-                    <field name="portal_type" column_invisible="1"/>
-                    <field name="action_xml_id" column_invisible="1"/>
-                    <button name="action_open_section"
-                            type="object"
-                            string="Open"
-                            icon="fa-arrow-circle-right"
-                            class="btn-primary"/>
-                </list>
-            </field>
-        </record>
+    <!-- Admin management view for portal sections -->
+    <record id="view_health_portal_section_form" model="ir.ui.view">
+        <field name="name">health.portal.section.form</field>
+        <field name="model">health.portal.section</field>
+        <field name="arch" type="xml">
+            <form string="Portal Section / قسم البوابة">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="portal_type"/>
+                            <field name="icon"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-        <!-- Action: Employee Portal Sections -->
-        <record id="action_health_employee_portal_sections" model="ir.actions.act_window">
-            <field name="name">Employee Portal</field>
-            <field name="res_model">health.portal.section</field>
-            <field name="view_mode">list</field>
-            <field name="view_id" ref="view_health_portal_section_employee_list"/>
-            <field name="domain">[('portal_type', '=', 'employee')]</field>
-            <field name="context">{'create': False}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
+    <record id="view_health_portal_section_list" model="ir.ui.view">
+        <field name="name">health.portal.section.list</field>
+        <field name="model">health.portal.section</field>
+        <field name="arch" type="xml">
+            <list string="Portal Sections / أقسام البوابة">
+                <field name="sequence" widget="handle"/>
+                <field name="portal_type"/>
+                <field name="icon"/>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- Action: Doctor Portal Sections -->
-        <record id="action_health_doctor_portal_sections" model="ir.actions.act_window">
-            <field name="name">Doctor Portal</field>
-            <field name="res_model">health.portal.section</field>
-            <field name="view_mode">list</field>
-            <field name="view_id" ref="view_health_portal_section_doctor_list"/>
-            <field name="domain">[('portal_type', '=', 'doctor')]</field>
-            <field name="context">{'create': False}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
-        </record>
-
-    </data>
+    <record id="action_health_portal_section" model="ir.actions.act_window">
+        <field name="name">Portal Sections / أقسام البوابة</field>
+        <field name="res_model">health.portal.section</field>
+        <field name="view_mode">list,form</field>
+    </record>
 </odoo>

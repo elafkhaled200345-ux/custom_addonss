@@ -1,82 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <record id="view_health_booking_list" model="ir.ui.view">
+        <field name="name">health.booking.list</field><field name="model">health.booking</field>
+        <field name="arch" type="xml">
+            <list string="Bookings / الحجوزات" default_order="id desc">
+                <field name="name"/><field name="patient_name"/><field name="visit_type"/><field name="clinic_id"/>
+                <field name="doctor_id"/><field name="booking_date"/><field name="queue_number" optional="show"/>
+                <field name="waiting_time" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'visited'" decoration-info="state == 'checked_in'" decoration-warning="state == 'confirmed'" decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL — Bookings (Full Edit + Save Confirm)
-        ══════════════════════════════════════════════════════ -->
+    <record id="view_health_booking_kanban" model="ir.ui.view">
+        <field name="name">health.booking.kanban</field><field name="model">health.booking</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="False">
+                <field name="name"/><field name="patient_name"/><field name="clinic_id"/><field name="doctor_id"/>
+                <field name="state"/><field name="booking_date"/><field name="visit_type"/><field name="queue_number"/>
+                <templates><t t-name="kanban-box"><div class="oe_kanban_global_click o_kanban_record">
+                    <strong><field name="name"/></strong><div><i class="fa fa-user"/> <field name="patient_name"/></div>
+                    <div><i class="fa fa-hospital-o"/> <field name="clinic_id"/></div>
+                    <div t-if="record.doctor_id.raw_value"><i class="fa fa-user-md"/> <field name="doctor_id"/></div>
+                    <div><field name="visit_type"/> · <field name="booking_date"/></div>
+                    <div t-if="record.queue_number.raw_value"><strong>Queue: <field name="queue_number"/></strong></div>
+                </div></t></templates>
+            </kanban>
+        </field>
+    </record>
 
-        <record id="view_health_booking_tree" model="ir.ui.view">
-            <field name="name">health.booking.list</field>
-            <field name="model">health.booking</field>
-            <field name="arch" type="xml">
-                <list string="Bookings">
-                    <field name="name" string="Booking Number"/>
-                    <field name="patient_id" string="Patient"/>
-                    <field name="create_date" string="Date"/>
-                    <field name="state" string="Status" widget="badge"
-                           decoration-success="state == 'active'"
-                           decoration-danger="state == 'cancelled'"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_booking_form" model="ir.ui.view">
-            <field name="name">health.booking.form</field>
-            <field name="model">health.booking</field>
-            <field name="arch" type="xml">
-                <form string="Booking">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <label for="name" string="Booking Number"/>
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Booking Details">
-                                <field name="patient_id" string="Patient"/>
-                                <field name="create_date" string="Date" readonly="1"/>
-                                <field name="state" string="Status" widget="badge"
-                                       decoration-success="state == 'active'"
-                                       decoration-danger="state == 'cancelled'"/>
-                            </group>
+    <record id="view_health_booking_form" model="ir.ui.view">
+        <field name="name">health.booking.form</field><field name="model">health.booking</field>
+        <field name="arch" type="xml">
+            <form string="Booking / حجز">
+                <header>
+                    <button name="action_confirm" string="Confirm / تأكيد" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_check_in" string="Check In / تسجيل الوصول" type="object" class="btn-success" invisible="state != 'confirmed'"/>
+                    <button name="action_mark_visited" string="Complete Visit / إنهاء الزيارة" type="object" class="btn-primary" invisible="state not in ('confirmed', 'checked_in')"/>
+                    <button name="action_cancel" string="Cancel / إلغاء" type="object" class="btn-danger" invisible="state in ('visited', 'cancelled')" confirm="Cancel this booking?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,checked_in,visited"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Visit / الزيارة">
+                            <field name="patient_id"/><field name="visit_type"/>
+                            <field name="previous_booking_id" invisible="visit_type != 'followup'" required="visit_type == 'followup'"/>
+                            <field name="clinic_id"/><field name="appointment_id"/>
+                            <field name="doctor_id"/><field name="booking_date"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                        <group string="Reception / الاستقبال">
+                            <field name="arrival_time"/><field name="check_in_time"/><field name="queue_number" readonly="1"/>
+                            <field name="reception_employee_id"/><field name="waiting_time" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Medical Records / السجلات الطبية"><field name="medical_record_ids" readonly="1"><list><field name="name"/><field name="create_date_manual"/><field name="doctor_id"/><field name="diagnosis_code"/></list></field></page>
+                        <page string="Invoices / الفواتير"><field name="invoice_ids" readonly="1"><list><field name="name"/><field name="invoice_date"/><field name="total_amount"/><field name="amount_paid"/><field name="remaining_balance"/><field name="invoice_status" widget="badge"/></list></field></page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div>
+            </form>
+        </field>
+    </record>
 
-        <record id="view_health_booking_search" model="ir.ui.view">
-            <field name="name">health.booking.search</field>
-            <field name="model">health.booking</field>
-            <field name="arch" type="xml">
-                <search string="Search Bookings">
-                    <field name="name" string="Booking Number"/>
-                    <field name="patient_id" string="Patient"/>
-                    <filter name="active_bookings" string="Active"
-                            domain="[('state', '=', 'active')]"/>
-                    <filter name="cancelled" string="Cancelled"
-                            domain="[('state', '=', 'cancelled')]"/>
-                </search>
-            </field>
-        </record>
+    <record id="view_health_booking_patient_form" model="ir.ui.view">
+        <field name="name">health.booking.form.patient</field><field name="model">health.booking</field>
+        <field name="arch" type="xml">
+            <form string="Book Appointment / احجز موعد">
+                <header><button name="action_confirm" string="Confirm Booking / تأكيد الحجز" type="object" class="btn-primary" invisible="state != 'draft'"/><field name="state" widget="statusbar"/></header>
+                <sheet><group><field name="patient_id" readonly="1"/><field name="visit_type"/><field name="previous_booking_id" invisible="visit_type != 'followup'" required="visit_type == 'followup'"/><field name="clinic_id"/><field name="appointment_id" domain="[('clinic_id', '=', clinic_id), ('is_available', '=', True)]"/><field name="doctor_id" readonly="1"/><field name="booking_date" readonly="1"/></group></sheet>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_health_booking" model="ir.actions.act_window">
-            <field name="name">Bookings</field>
-            <field name="res_model">health.booking</field>
-            <field name="view_mode">list,form</field>
-            <field name="search_view_id" ref="view_health_booking_search"/>
-        </record>
+    <record id="view_health_booking_search" model="ir.ui.view">
+        <field name="name">health.booking.search</field><field name="model">health.booking</field>
+        <field name="arch" type="xml"><search><field name="name"/><field name="patient_id"/><field name="clinic_id"/><field name="doctor_id"/><filter string="Today" name="today" domain="[('booking_date', '=', context_today().strftime('%Y-%m-%d'))]"/><filter string="Follow-Up" name="followup" domain="[('visit_type', '=', 'followup')]"/><group expand="1" string="Group By"><filter string="Clinic" name="by_clinic" context="{'group_by':'clinic_id'}"/><filter string="Status" name="by_state" context="{'group_by':'state'}"/></group></search></field>
+    </record>
 
-    </data>
+    <record id="action_health_booking" model="ir.actions.act_window">
+        <field name="name">Bookings / الحجوزات</field><field name="res_model">health.booking</field>
+        <field name="view_mode">kanban,list,form</field><field name="search_view_id" ref="view_health_booking_search"/>
+    </record>
 </odoo>

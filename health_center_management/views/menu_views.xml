@@ -1,89 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- ROOT -->
+    <menuitem id="menu_health_center_root"
+              name="Health Center / المركز الصحي"
+              sequence="10"/>
 
-        <!-- ROOT: Shows today's available clinics on click -->
-        <menuitem id="menu_health_center_root"
-                  name="Health Center"
-                  action="action_health_center_home"
-                  sequence="10"/>
+    <!-- ══════════════════════════════════════════════════════
+         DASHBOARD
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_dashboard"
+              name="📊 Dashboard / لوحة المتابعة"
+              parent="menu_health_center_root"
+              action="action_health_dashboard"
+              sequence="5"
+              groups="health_center_management.group_health_employee"/>
 
-        <!-- PATIENT PORTAL -->
-        <menuitem id="menu_health_patient_root"
-                  name="Patient Portal"
-                  parent="menu_health_center_root"
-                  sequence="10"
-                  groups="health_center_management.group_health_patient"/>
+    <!-- ══════════════════════════════════════════════════════
+         PATIENT PORTAL
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_patient_root"
+              name="Patient Portal / بوابة المريض"
+              parent="menu_health_center_root"
+              sequence="10"
+              groups="health_center_management.group_health_patient"/>
 
-        <menuitem id="menu_health_patient_book"
-                  name="Book Your Appointment"
-                  parent="menu_health_patient_root"
-                  action="action_health_patient_book"
-                  sequence="10"
-                  groups="health_center_management.group_health_patient"/>
+    <menuitem id="menu_health_patient_book"
+              name="Book Appointment / احجز موعد"
+              parent="menu_health_patient_root"
+              action="action_health_patient_book"
+              sequence="10"
+              groups="health_center_management.group_health_patient"/>
 
-        <menuitem id="menu_health_patient_download"
-                  name="Download Medical Report"
-                  parent="menu_health_patient_root"
-                  action="action_health_examination_patient"
-                  sequence="20"
-                  groups="health_center_management.group_health_patient"/>
+    <menuitem id="menu_health_patient_examinations"
+              name="My Examinations / فحوصاتي"
+              parent="menu_health_patient_root"
+              action="action_health_examination_patient"
+              sequence="20"
+              groups="health_center_management.group_health_patient"/>
 
-        <menuitem id="menu_health_patient_clinics"
-                  name="Available Clinics"
-                  parent="menu_health_patient_root"
-                  action="action_health_clinic_patient"
-                  sequence="30"
-                  groups="health_center_management.group_health_patient"/>
+    <menuitem id="menu_health_patient_clinics"
+              name="Available Clinics / العيادات المتاحة"
+              parent="menu_health_patient_root"
+              action="action_health_clinic_patient"
+              sequence="30"
+              groups="health_center_management.group_health_patient"/>
 
-        <!-- DOCTOR PORTAL — Password Protected -->
-        <menuitem id="menu_health_doctor_root"
-                  name="Doctor Portal"
-                  parent="menu_health_center_root"
-                  action="action_doctor_portal_login"
-                  sequence="20"
-                  groups="health_center_management.group_health_doctor"/>
+    <!-- ══════════════════════════════════════════════════════
+         DOCTOR PORTAL
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_doctor_root"
+              name="Doctor Portal / بوابة الطبيب"
+              parent="menu_health_center_root"
+              action="action_doctor_portal_login"
+              sequence="20"
+              groups="health_center_management.group_health_doctor"/>
 
-        <!-- EMPLOYEE PORTAL — Password Protected -->
-        <menuitem id="menu_health_employee_root"
-                  name="Employee Portal"
-                  parent="menu_health_center_root"
-                  action="action_employee_portal_login"
-                  sequence="30"
-                  groups="health_center_management.group_health_employee"/>
+    <!-- ══════════════════════════════════════════════════════
+         EMPLOYEE PORTAL
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_employee_root"
+              name="Employee Portal / بوابة الموظف"
+              parent="menu_health_center_root"
+              action="action_employee_portal_login"
+              sequence="30"
+              groups="health_center_management.group_health_employee"/>
 
-        <!-- REPORTS PORTAL — Password Protected -->
-        <menuitem id="menu_health_reports_root"
-                  name="Reports Portal"
-                  parent="menu_health_center_root"
-                  action="action_health_report_portal_login"
-                  sequence="40"
-                  groups="health_center_management.group_health_employee,health_center_management.group_health_doctor"/>
+    <!-- ══════════════════════════════════════════════════════
+         MANAGEMENT (EMPLOYEE + DOCTOR)
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_management_root"
+              name="Management / الإدارة"
+              parent="menu_health_center_root"
+              sequence="40"
+              groups="health_center_management.group_health_employee"/>
 
-        <!-- PHARMACY AND LABORATORY -->
-        <menuitem id="menu_health_services_root"
-                  name="Additional Services"
-                  parent="menu_health_center_root"
-                  sequence="50"/>
+    <menuitem id="menu_health_patients"
+              name="Patients / المرضى"
+              parent="menu_health_management_root"
+              action="action_health_patient"
+              sequence="10"/>
 
-        <menuitem id="menu_health_pharmacy"
-                  name="Pharmacy"
-                  parent="menu_health_services_root"
-                  action="action_health_pharmacy"
-                  sequence="10"/>
+    <menuitem id="menu_health_bookings"
+              name="Bookings / الحجوزات"
+              parent="menu_health_management_root"
+              action="action_health_booking"
+              sequence="20"/>
 
-        <menuitem id="menu_health_laboratory"
-                  name="Laboratory"
-                  parent="menu_health_services_root"
-                  action="action_health_laboratory"
-                  sequence="20"/>
+    <menuitem id="menu_health_appointments"
+              name="Appointments / المواعيد"
+              parent="menu_health_management_root"
+              action="action_health_appointment"
+              sequence="30"/>
 
-        <!-- CONTACT US — Single entry point for all users -->
-        <menuitem id="menu_health_contact_us"
-                  name="Contact Us"
-                  parent="menu_health_center_root"
-                  action="action_health_contact_info"
-                  sequence="60"/>
+    <menuitem id="menu_health_medical_records"
+              name="Medical Records / السجلات الطبية"
+              parent="menu_health_management_root"
+              action="action_health_medical_record"
+              sequence="40"/>
 
-    </data>
+    <menuitem id="menu_health_examinations"
+              name="Examinations / الفحوصات"
+              parent="menu_health_management_root"
+              action="action_health_examination"
+              sequence="50"/>
+
+    <menuitem id="menu_health_invoices"
+              name="Invoices / الفواتير"
+              parent="menu_health_management_root"
+              action="action_health_invoice"
+              sequence="60"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         LABORATORY
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_lab_root"
+              name="Laboratory / المختبر"
+              parent="menu_health_center_root"
+              sequence="50"
+              groups="health_center_management.group_health_employee"/>
+
+    <menuitem id="menu_health_lab_requests"
+              name="Lab Requests / طلبات الفحص"
+              parent="menu_health_lab_root"
+              action="action_health_lab_request"
+              sequence="10"/>
+
+    <menuitem id="menu_health_lab_pending"
+              name="Pending Tests / فحوصات معلقة"
+              parent="menu_health_lab_root"
+              action="action_health_laboratory"
+              sequence="20"/>
+
+    <menuitem id="menu_health_lab_test_types"
+              name="Test Catalogue / قائمة الفحوصات"
+              parent="menu_health_lab_root"
+              action="action_health_lab_test_type"
+              sequence="30"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         PHARMACY
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_pharmacy_root"
+              name="Pharmacy / الصيدلية"
+              parent="menu_health_center_root"
+              sequence="60"
+              groups="health_center_management.group_health_employee"/>
+
+    <menuitem id="menu_health_pharmacy_dispenses"
+              name="Dispense Orders / أوامر الصرف"
+              parent="menu_health_pharmacy_root"
+              action="action_health_pharmacy_dispense"
+              sequence="10"/>
+
+    <menuitem id="menu_health_medicines"
+              name="Medicines Catalogue / كتالوج الأدوية"
+              parent="menu_health_pharmacy_root"
+              action="action_health_medicine"
+              sequence="20"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         CONFIGURATION
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_config_root"
+              name="Configuration / الإعدادات"
+              parent="menu_health_center_root"
+              sequence="80"
+              groups="health_center_management.group_health_employee"/>
+
+    <menuitem id="menu_health_clinics"
+              name="Clinics / العيادات"
+              parent="menu_health_config_root"
+              action="action_health_clinic"
+              sequence="10"/>
+
+    <menuitem id="menu_health_doctors"
+              name="Doctors / الأطباء"
+              parent="menu_health_config_root"
+              action="action_health_doctor"
+              sequence="20"/>
+
+    <menuitem id="menu_health_portal_sections"
+              name="Portal Sections / أقسام البوابة"
+              parent="menu_health_config_root"
+              action="action_health_portal_section"
+              sequence="30"/>
+
+    <menuitem id="menu_health_contact"
+              name="Contact Info / معلومات التواصل"
+              parent="menu_health_config_root"
+              action="action_health_contact_edit"
+              sequence="40"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         REPORTS PORTAL
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_reports_root"
+              name="Reports Portal / بوابة التقارير"
+              parent="menu_health_center_root"
+              action="action_health_report_portal_login"
+              sequence="70"
+              groups="health_center_management.group_health_employee,health_center_management.group_health_doctor"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         CONTACT US (all users)
+    ══════════════════════════════════════════════════════ -->
+    <menuitem id="menu_health_contact_us"
+              name="📞 Contact Us / تواصل معنا"
+              parent="menu_health_center_root"
+              action="action_health_contact_info"
+              sequence="90"/>
+    <!-- Employees menu (managers only) -->
+    <menuitem id="menu_health_employee"
+              name="Employees / الموظفون"
+              action="action_health_employee"
+              parent="menu_health_config_root"
+              sequence="25"
+              groups="health_center_management.group_health_manager"/>
+
+    <!-- Portal Configuration menu -->
+    <menuitem id="menu_health_portal_config"
+              name="Portal Configuration / إعدادات البوابة"
+              action="action_health_portal_config"
+              parent="menu_health_config_root"
+              sequence="35"
+              groups="health_center_management.group_health_manager"/>
 </odoo>

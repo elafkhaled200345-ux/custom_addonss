@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="health_contact_default" model="health.contact.settings">
+        <field name="center_name">Health Center / المركز الصحي</field>
+        <field name="phone">+966 XX XXX XXXX</field>
+        <field name="working_hours">Sun–Thu: 8:00 AM – 8:00 PM | الأحد – الخميس: ٨ص – ٨م</field>
+    </record>
+</odoo>

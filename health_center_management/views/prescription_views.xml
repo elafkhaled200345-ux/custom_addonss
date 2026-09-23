@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_prescription_list" model="ir.ui.view">
+        <field name="name">health.prescription.list</field><field name="model">health.prescription</field>
+        <field name="arch" type="xml"><list string="Prescriptions / الوصفات الطبية"><field name="name"/><field name="patient_id"/><field name="doctor_id"/><field name="prescription_date"/><field name="state" widget="badge"/></list></field>
+    </record>
+    <record id="view_health_prescription_form" model="ir.ui.view">
+        <field name="name">health.prescription.form</field><field name="model">health.prescription</field>
+        <field name="arch" type="xml">
+            <form string="Prescription / وصفة طبية">
+                <header><button name="action_issue" string="Issue / اعتماد" type="object" class="btn-primary" invisible="state != 'draft'"/><button name="action_cancel" string="Cancel / إلغاء" type="object" class="btn-danger" invisible="state == 'cancelled'"/><field name="state" widget="statusbar" statusbar_visible="draft,issued"/></header>
+                <sheet><div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group><group><field name="medical_record_id"/><field name="patient_id" readonly="1"/><field name="doctor_id" readonly="1"/></group><group><field name="prescription_date"/></group></group>
+                    <field name="line_ids"><list editable="bottom"><field name="sequence" widget="handle"/><field name="medicine_id"/><field name="quantity"/><field name="dosage_instructions"/><field name="duration"/><field name="notes"/></list></field>
+                    <field name="notes" placeholder="Notes / ملاحظات"/>
+                </sheet>
+                <div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div>
+            </form>
+        </field>
+    </record>
+    <record id="action_health_prescription" model="ir.actions.act_window"><field name="name">Prescriptions / الوصفات الطبية</field><field name="res_model">health.prescription</field><field name="view_mode">list,form</field></record>
+</odoo>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_dashboard_form" model="ir.ui.view">
+        <field name="name">health.dashboard.form</field>
+        <field name="model">health.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Health Center Dashboard / لوحة المتابعة" create="false" edit="false">
+                <header>
+                    <button name="action_refresh" string="🔄 Refresh / تحديث"
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2>🏥 Health Center Dashboard / لوحة متابعة المركز الصحي</h2>
+                    </div>
+
+                    <!-- Today's KPIs -->
+                    <div class="row mb-4">
+                        <div class="col-12 mb-2">
+                            <h4 class="text-muted border-bottom pb-2">📅 Today / اليوم</h4>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center bg-primary text-white p-3 rounded"
+                                 style="cursor:pointer;" onclick="">
+                                <h2><field name="today_appointments"/></h2>
+                                <p class="mb-0 small">Appointments Today / مواعيد اليوم</p>
+                                <button name="action_open_appointments" type="object"
+                                        class="btn btn-sm btn-light mt-2">View →</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center bg-success text-white p-3 rounded">
+                                <h2><field name="available_appointments_today"/></h2>
+                                <p class="mb-0 small">Available Slots / مواعيد متاحة</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center bg-info text-white p-3 rounded">
+                                <h2><field name="today_patients"/></h2>
+                                <p class="mb-0 small">Patients Today / مرضى اليوم</p>
+                                <button name="action_open_patients" type="object"
+                                        class="btn btn-sm btn-light mt-2">View →</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center bg-warning text-white p-3 rounded">
+                                <h2><field name="today_revenue" widget="float" digits="[16,2]"/></h2>
+                                <p class="mb-0 small">Today's Revenue / إيرادات اليوم</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overall KPIs -->
+                    <div class="row mb-4">
+                        <div class="col-12 mb-2">
+                            <h4 class="text-muted border-bottom pb-2">📊 Overall / الإجمالي</h4>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center border p-3 rounded">
+                                <h2 class="text-primary"><field name="total_patients"/></h2>
+                                <p class="mb-0 small">Total Patients / إجمالي المرضى</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center border p-3 rounded">
+                                <h2 class="text-success"><field name="total_bookings"/></h2>
+                                <p class="mb-0 small">Total Bookings / إجمالي الحجوزات</p>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center border p-3 rounded">
+                                <h2 class="text-danger"><field name="pending_invoices"/></h2>
+                                <p class="mb-0 small">Unpaid Invoices / فواتير غير مدفوعة</p>
+                                <button name="action_open_invoices" type="object"
+                                        class="btn btn-sm btn-outline-danger mt-2">View →</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card text-center border p-3 rounded">
+                                <h2 class="text-warning"><field name="low_stock_medicines"/></h2>
+                                <p class="mb-0 small">Low Stock Medicines / أدوية منخفضة</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue & Clinics -->
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="card border-success p-3 rounded">
+                                <h5>💰 Total Revenue / إجمالي الإيرادات</h5>
+                                <h3 class="text-success">
+                                    <field name="total_revenue" widget="float" digits="[16,2]"/> SAR
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card border-info p-3 rounded">
+                                <h5>🏥 Active Clinics / عيادات نشطة</h5>
+                                <h3 class="text-info">
+                                    <field name="active_clinics_today"/>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_health_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard / لوحة المتابعة</field>
+        <field name="res_model">health.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <record id="action_health_center_home" model="ir.actions.act_window">
+        <field name="name">Health Center / المركز الصحي</field>
+        <field name="res_model">health.clinic</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

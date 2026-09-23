@@ -1,292 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <record id="view_health_patient_kanban" model="ir.ui.view">
+        <field name="name">health.patient.kanban</field>
+        <field name="model">health.patient</field>
+        <field name="arch" type="xml">
+            <kanban quick_create="False">
+                <field name="name"/><field name="phone"/><field name="age"/>
+                <field name="booking_count"/><field name="medical_record_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <strong><field name="name"/></strong>
+                            <div><i class="fa fa-phone"/> <field name="phone"/></div>
+                            <div class="text-muted">Age: <field name="age"/></div>
+                            <div class="mt-1"><small>Bookings: <field name="booking_count"/> · Records: <field name="medical_record_count"/></small></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
-        <!-- Shared Search View -->
-        <record id="view_health_patient_search" model="ir.ui.view">
-            <field name="name">health.patient.search</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <search string="Search Patients">
-                    <field name="name" string="Patient Name"/>
-                    <field name="phone" string="Phone"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <filter name="draft" string="Draft"
-                            domain="[('state', '=', 'draft')]"/>
-                    <filter name="confirmed" string="Confirmed"
-                            domain="[('state', '=', 'confirmed')]"/>
-                    <filter name="cancelled" string="Cancelled"
-                            domain="[('state', '=', 'cancelled')]"/>
-                    <group expand="0" string="Group By">
-                        <filter name="group_clinic" string="Clinic"
-                                context="{'group_by': 'clinic_id'}"/>
-                        <filter name="group_state" string="Status"
-                                context="{'group_by': 'state'}"/>
+    <record id="view_health_patient_list" model="ir.ui.view">
+        <field name="name">health.patient.list</field>
+        <field name="model">health.patient</field>
+        <field name="arch" type="xml">
+            <list string="Patients / المرضى" default_order="id desc">
+                <field name="name"/><field name="phone"/><field name="email" optional="show"/>
+                <field name="age"/><field name="gender"/><field name="national_id" optional="show"/>
+                <field name="booking_count" string="Bookings"/><field name="medical_record_count" string="Records"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_health_patient_form" model="ir.ui.view">
+        <field name="name">health.patient.form</field>
+        <field name="model">health.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient / مريض">
+                <header>
+                    <button name="action_new_booking" string="New Booking / حجز جديد" type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-calendar" type="object" name="action_view_bookings">
+                            <field name="booking_count" widget="statinfo" string="Bookings"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-clock-o" type="object" name="action_view_appointments">
+                            <field name="appointment_count" widget="statinfo" string="Appointments"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-file-text-o" type="object" name="action_view_medical_records">
+                            <field name="medical_record_count" widget="statinfo" string="Medical Records"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-money" type="object" name="action_view_invoices">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" placeholder="Patient Name / اسم المريض"/></h1></div>
+                    <group>
+                        <group string="Personal Info / المعلومات الشخصية">
+                            <field name="photo" widget="image" class="oe_avatar"/>
+                            <field name="birthdate"/><field name="age" readonly="1"/><field name="gender"/>
+                            <field name="national_id"/><field name="blood_type"/><field name="user_id" groups="base.group_system"/>
+                        </group>
+                        <group string="Contact / التواصل">
+                            <field name="phone"/><field name="email"/>
+                            <field name="emergency_contact"/><field name="emergency_phone"/><field name="emergency_relation"/>
+                        </group>
                     </group>
-                </search>
-            </field>
-        </record>
+                    <notebook>
+                        <page string="Insurance / التأمين">
+                            <group><field name="insurance_company"/><field name="insurance_number"/><field name="insurance_expiry"/></group>
+                        </page>
+                        <page string="Medical Notes / الملاحظات الطبية">
+                            <group><field name="allergies"/><field name="notes"/></group>
+                        </page>
+                        <page string="Bookings / الحجوزات">
+                            <field name="booking_ids" readonly="1">
+                                <list><field name="name"/><field name="visit_type"/><field name="clinic_id"/><field name="doctor_id"/><field name="booking_date"/><field name="state" widget="badge"/></list>
+                            </field>
+                        </page>
+                        <page string="Medical Records / السجلات الطبية">
+                            <field name="medical_record_ids" readonly="1">
+                                <list><field name="name"/><field name="create_date_manual"/><field name="clinic_id"/><field name="doctor_id"/><field name="diagnosis_code"/></list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div>
+            </form>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             PATIENT PORTAL — Book Appointment
-        ══════════════════════════════════════════════════════ -->
+    <record id="view_health_patient_search" model="ir.ui.view">
+        <field name="name">health.patient.search</field>
+        <field name="model">health.patient</field>
+        <field name="arch" type="xml">
+            <search string="Search Patients / بحث في المرضى">
+                <field name="name"/><field name="phone"/><field name="email"/><field name="national_id"/>
+                <group expand="1" string="Group By / تجميع"><filter string="Gender / الجنس" name="by_gender" context="{'group_by': 'gender'}"/></group>
+            </search>
+        </field>
+    </record>
 
-        <record id="view_health_patient_patient_tree" model="ir.ui.view">
-            <field name="name">health.patient.list.patient</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <list string="My Bookings" create="1" delete="0">
-                    <field name="name" string="Patient Name"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <field name="booking_type" string="Booking Type"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="state" string="Status" widget="badge"
-                           decoration-success="state == 'confirmed'"
-                           decoration-warning="state == 'draft'"
-                           decoration-danger="state == 'cancelled'"/>
-                </list>
-            </field>
-        </record>
+    <record id="action_health_patient" model="ir.actions.act_window">
+        <field name="name">Patients / المرضى</field><field name="res_model">health.patient</field>
+        <field name="view_mode">kanban,list,form</field><field name="search_view_id" ref="view_health_patient_search"/>
+    </record>
 
-        <record id="view_health_patient_patient_form" model="ir.ui.view">
-            <field name="name">health.patient.form.patient</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <form string="Book Appointment">
-                    <header>
-                        <button name="action_confirm_booking"
-                                string="✔ Confirm Booking"
-                                type="object"
-                                class="btn-primary"
-                                invisible="state != 'draft'"/>
-                        <button name="action_cancel_booking"
-                                string="✖ Cancel Booking"
-                                type="object"
-                                class="btn-danger"
-                                invisible="state == 'cancelled'"
-                                confirm="Are you sure you want to cancel this booking?"/>
-                        <field name="state" widget="statusbar"
-                               statusbar_visible="draft,confirmed,cancelled"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" placeholder="Patient Name"/></h1>
-                        </div>
-                        <group>
-                            <group string="Personal Information">
-                                <field name="phone" string="Phone"/>
-                                <field name="birthdate" string="Date of Birth"/>
-                                <field name="gender" string="Gender"/>
-                            </group>
-                            <group string="Booking Details">
-                                <field name="booking_type" string="Booking Type"/>
-                                <field name="clinic_id" string="Clinic"/>
-                                <field name="appointment_id" string="Appointment Time"
-                                       domain="[('clinic_id', '=', clinic_id), ('is_available', '=', True)]"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                            </group>
-                        </group>
-                        <group invisible="booking_type != 'followup'" string="Follow-Up Information">
-                            <field name="followup_booking_number"
-                                   string="Previous Booking Number"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             DOCTOR PORTAL — My Clinic Patients
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_patient_doctor_tree" model="ir.ui.view">
-            <field name="name">health.patient.list.doctor</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <list string="My Clinic Patients" create="0" delete="0">
-                    <field name="name" string="Patient Name"/>
-                    <field name="phone" string="Phone"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <field name="booking_type" string="Type"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="state" string="Status" widget="badge"
-                           decoration-success="state == 'confirmed'"
-                           decoration-warning="state == 'draft'"
-                           decoration-danger="state == 'cancelled'"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_patient_doctor_form" model="ir.ui.view">
-            <field name="name">health.patient.form.doctor</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <form string="Patient Details" create="false" delete="false">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button name="action_confirm_booking"
-                                string="✔ Confirm Booking"
-                                type="object"
-                                class="btn-success"
-                                invisible="state != 'draft'"/>
-                        <button name="action_cancel_booking"
-                                string="✖ Cancel Booking"
-                                type="object"
-                                class="btn-danger"
-                                invisible="state == 'cancelled'"
-                                confirm="Are you sure you want to cancel this booking?"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                        <field name="state" widget="statusbar"
-                               statusbar_visible="draft,confirmed,cancelled"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name"/></h1>
-                        </div>
-                        <group>
-                            <group string="Personal Information">
-                                <field name="phone" string="Phone"/>
-                                <field name="birthdate" string="Date of Birth"/>
-                                <field name="gender" string="Gender"/>
-                            </group>
-                            <group string="Booking Details">
-                                <field name="booking_type" string="Booking Type"/>
-                                <field name="clinic_id" string="Clinic"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                            </group>
-                        </group>
-                        <group string="Medical Record">
-                            <field name="medical_record_id" string="Medical Record"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL — Manage Patients
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_patient_employee_tree" model="ir.ui.view">
-            <field name="name">health.patient.list.employee</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <list string="Patients">
-                    <field name="name" string="Patient Name"/>
-                    <field name="phone" string="Phone"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <field name="booking_type" string="Type"/>
-                    <field name="booking_number" string="Booking Number"/>
-                    <field name="state" string="Status" widget="badge"
-                           decoration-success="state == 'confirmed'"
-                           decoration-warning="state == 'draft'"
-                           decoration-danger="state == 'cancelled'"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_patient_employee_form" model="ir.ui.view">
-            <field name="name">health.patient.form.employee</field>
-            <field name="model">health.patient</field>
-            <field name="arch" type="xml">
-                <form string="Patient">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button name="action_confirm_booking"
-                                string="✔ Confirm Booking"
-                                type="object"
-                                class="btn-success"
-                                invisible="state != 'draft'"/>
-                        <button name="action_cancel_booking"
-                                string="✖ Cancel Booking"
-                                type="object"
-                                class="btn-danger"
-                                invisible="state == 'cancelled'"
-                                confirm="Are you sure you want to cancel this booking?"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                        <field name="state" widget="statusbar"
-                               statusbar_visible="draft,confirmed,cancelled"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" placeholder="Patient Name"/></h1>
-                        </div>
-                        <group>
-                            <group string="Personal Information">
-                                <field name="phone" string="Phone"/>
-                                <field name="birthdate" string="Date of Birth"/>
-                                <field name="gender" string="Gender"/>
-                            </group>
-                            <group string="Booking Details">
-                                <field name="booking_type" string="Booking Type"/>
-                                <field name="clinic_id" string="Clinic"/>
-                                <field name="appointment_id" string="Appointment Time"
-                                       domain="[('clinic_id', '=', clinic_id), ('is_available', '=', True)]"/>
-                                <field name="booking_number" string="Booking Number" readonly="1"/>
-                            </group>
-                        </group>
-                        <group invisible="booking_type != 'followup'" string="Follow-Up Information">
-                            <field name="followup_booking_number" string="Previous Booking Number"/>
-                        </group>
-                        <group string="Medical Record">
-                            <field name="medical_record_id" string="Medical Record"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- Actions -->
-        <record id="action_health_patient_book" model="ir.actions.act_window">
-            <field name="name">Book Your Appointment</field>
-            <field name="res_model">health.patient</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_patient_patient_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_patient_patient_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_patient_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_patient'))]"/>
-        </record>
-
-        <record id="action_health_patient_doctor" model="ir.actions.act_window">
-            <field name="name">My Clinic Patients</field>
-            <field name="res_model">health.patient</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_patient_doctor_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_patient_doctor_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_patient_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
-        </record>
-
-        <record id="action_health_patient_employee" model="ir.actions.act_window">
-            <field name="name">Manage Patients</field>
-            <field name="res_model">health.patient</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_patient_employee_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_patient_employee_form')}),
-            ]"/>
-            <field name="search_view_id" ref="view_health_patient_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-    </data>
+    <!-- Keep the historical XML id used by the Patient Portal menu, but open a booking form. -->
+    <record id="action_health_patient_book" model="ir.actions.act_window">
+        <field name="name">Book Appointment / احجز موعد</field>
+        <field name="res_model">health.booking</field><field name="view_mode">form</field>
+        <field name="view_id" ref="view_health_booking_patient_form"/><field name="target">current</field>
+    </record>
 </odoo>

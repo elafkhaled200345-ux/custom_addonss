@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <odoo>
+      <!-- ═══════════════════════════════════════════════════════════════
+           DEMO DATA — بيانات تجريبية للتثبيت الأول
+           تشمل: أطباء + مواعيد + مرضى + تحاليل + أدوية
+      ═══════════════════════════════════════════════════════════════ -->
+
+      <!-- Demo Lab Test Types -->
+      <record id="lab_test_cbc" model="health.lab.test.type">
+          <field name="name">CBC — Complete Blood Count</field>
+          <field name="name_ar">صورة دم كاملة</field>
+          <field name="code">CBC</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_crp" model="health.lab.test.type">
+          <field name="name">CRP — C-Reactive Protein</field>
+          <field name="name_ar">بروتين سي التفاعلي</field>
+          <field name="code">CRP</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_esr" model="health.lab.test.type">
+          <field name="name">ESR — Erythrocyte Sedimentation Rate</field>
+          <field name="name_ar">سرعة ترسيب الدم</field>
+          <field name="code">ESR</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_fbs" model="health.lab.test.type">
+          <field name="name">FBS — Fasting Blood Sugar</field>
+          <field name="name_ar">سكر الدم صيام</field>
+          <field name="code">FBS</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_urea" model="health.lab.test.type">
+          <field name="name">Urea &amp; Creatinine</field>
+          <field name="name_ar">يوريا وكرياتينين</field>
+          <field name="code">UREA-CREAT</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_lipid" model="health.lab.test.type">
+          <field name="name">Lipid Profile — Cholesterol, LDL, HDL, TG</field>
+          <field name="name_ar">دهون الدم</field>
+          <field name="code">LIPID</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_tsh" model="health.lab.test.type">
+          <field name="name">TSH — Thyroid Stimulating Hormone</field>
+          <field name="name_ar">هرمون الغدة الدرقية</field>
+          <field name="code">TSH</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_vitd" model="health.lab.test.type">
+          <field name="name">Vitamin D — 25-OH</field>
+          <field name="name_ar">فيتامين د</field>
+          <field name="code">VIT-D</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_vitb12" model="health.lab.test.type">
+          <field name="name">Vitamin B12</field>
+          <field name="name_ar">فيتامين ب ١٢</field>
+          <field name="code">VIT-B12</field>
+          <field name="category">blood</field>
+      </record>
+      <record id="lab_test_urine_analysis" model="health.lab.test.type">
+          <field name="name">Urine Analysis — Complete</field>
+          <field name="name_ar">تحليل بول كامل</field>
+          <field name="code">UA</field>
+          <field name="category">urine</field>
+      </record>
+      <record id="lab_test_xray_chest" model="health.lab.test.type">
+          <field name="name">Chest X-Ray — PA View</field>
+          <field name="name_ar">أشعة صدر</field>
+          <field name="code">CXR</field>
+          <field name="category">xray</field>
+      </record>
+      <record id="lab_test_xray_nasopharynx" model="health.lab.test.type">
+          <field name="name">X-Ray Nasopharynx — Lateral</field>
+          <field name="name_ar">أشعة البلعوم الأنفي</field>
+          <field name="code">XRN-LAT</field>
+          <field name="category">xray</field>
+      </record>
+      <record id="lab_test_ct_sinuses" model="health.lab.test.type">
+          <field name="name">CT Sinuses — Coronal + Axial</field>
+          <field name="name_ar">أشعة مقطعية جيوب أنفية</field>
+          <field name="code">CT-SIN</field>
+          <field name="category">ct</field>
+      </record>
+      <record id="lab_test_pta" model="health.lab.test.type">
+          <field name="name">PTA — Pure Tone Audiometry</field>
+          <field name="name_ar">مقياس سمع</field>
+          <field name="code">PTA</field>
+          <field name="category">audiology</field>
+      </record>
+      <record id="lab_test_tympanometry" model="health.lab.test.type">
+          <field name="name">Tympanometry</field>
+          <field name="name_ar">قياس ضغط الأذن</field>
+          <field name="code">TYMP</field>
+          <field name="category">audiology</field>
+      </record>
+
+      <!-- Demo Medicines -->
+      <record id="med_amoxicillin" model="health.medicine">
+          <field name="name">Amoxicillin 500mg</field>
+          <field name="generic_name">Amoxicillin</field>
+          <field name="category">antibiotic</field>
+          <field name="dosage_form">capsule</field>
+          <field name="strength">500mg</field>
+          <field name="unit_price">0.50</field>
+          <field name="qty_available">200</field>
+          <field name="reorder_level">50</field>
+      </record>
+      <record id="med_paracetamol" model="health.medicine">
+          <field name="name">Paracetamol 500mg</field>
+          <field name="generic_name">Acetaminophen</field>
+          <field name="category">analgesic</field>
+          <field name="dosage_form">tablet</field>
+          <field name="strength">500mg</field>
+          <field name="unit_price">0.10</field>
+          <field name="qty_available">500</field>
+          <field name="reorder_level">100</field>
+      </record>
+      <record id="med_nasal_spray" model="health.medicine">
+          <field name="name">Mometasone Nasal Spray 50mcg</field>
+          <field name="generic_name">Mometasone Furoate</field>
+          <field name="category">antihistamine</field>
+          <field name="dosage_form">inhaler</field>
+          <field name="strength">50mcg/spray</field>
+          <field name="unit_price">25.00</field>
+          <field name="qty_available">30</field>
+          <field name="reorder_level">10</field>
+      </record>
+      <record id="med_ibuprofen" model="health.medicine">
+          <field name="name">Ibuprofen 400mg</field>
+          <field name="generic_name">Ibuprofen</field>
+          <field name="category">analgesic</field>
+          <field name="dosage_form">tablet</field>
+          <field name="strength">400mg</field>
+          <field name="unit_price">0.20</field>
+          <field name="qty_available">300</field>
+          <field name="reorder_level">80</field>
+      </record>
+
+      <!-- Demo Doctors (ملاحظة: اربط user_id يدوياً من Health Center > Doctors > System User) -->
+      <record id="demo_doctor_ent" model="health.doctor">
+          <field name="name">د. أحمد محمد العمري</field>
+          <field name="clinic_id" ref="health_center_management.clinic_ent"/>
+          <field name="speciality">أنف وأذن وحنجرة — ENT Specialist</field>
+          <field name="phone">0501234567</field>
+          <field name="consultation_fee">150.0</field>
+          <field name="sequence">1</field>
+      </record>
+      <record id="demo_doctor_internal" model="health.doctor">
+          <field name="name">د. سارة خالد الزهراني</field>
+          <field name="clinic_id" ref="health_center_management.clinic_internal"/>
+          <field name="speciality">طب باطني — Internal Medicine</field>
+          <field name="phone">0507654321</field>
+          <field name="consultation_fee">120.0</field>
+          <field name="sequence">2</field>
+      </record>
+      <record id="demo_doctor_cardiology" model="health.doctor">
+          <field name="name">د. محمد عبدالله القحطاني</field>
+          <field name="clinic_id" ref="health_center_management.clinic_cardiology"/>
+          <field name="speciality">أمراض قلب — Cardiologist</field>
+          <field name="phone">0509876543</field>
+          <field name="consultation_fee">200.0</field>
+          <field name="sequence">3</field>
+      </record>
+
+      <!-- Demo Appointments -->
+      <record id="demo_appt_ent_1" model="health.appointment">
+          <field name="clinic_id" ref="health_center_management.clinic_ent"/>
+          <field name="doctor_id" ref="demo_doctor_ent"/>
+          <field name="appointment_date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+          <field name="appointment_time">09:00</field>
+          <field name="examination_fees">150.0</field>
+          <field name="duration">30</field>
+          <field name="state">available</field>
+          <field name="is_available">True</field>
+      </record>
+      <record id="demo_appt_ent_2" model="health.appointment">
+          <field name="clinic_id" ref="health_center_management.clinic_ent"/>
+          <field name="doctor_id" ref="demo_doctor_ent"/>
+          <field name="appointment_date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+          <field name="appointment_time">09:30</field>
+          <field name="examination_fees">150.0</field>
+          <field name="duration">30</field>
+          <field name="state">available</field>
+          <field name="is_available">True</field>
+      </record>
+      <record id="demo_appt_internal_1" model="health.appointment">
+          <field name="clinic_id" ref="health_center_management.clinic_internal"/>
+          <field name="doctor_id" ref="demo_doctor_internal"/>
+          <field name="appointment_date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+          <field name="appointment_time">10:00</field>
+          <field name="examination_fees">120.0</field>
+          <field name="duration">30</field>
+          <field name="state">available</field>
+          <field name="is_available">True</field>
+      </record>
+      <record id="demo_appt_cardiology_1" model="health.appointment">
+          <field name="clinic_id" ref="health_center_management.clinic_cardiology"/>
+          <field name="doctor_id" ref="demo_doctor_cardiology"/>
+          <field name="appointment_date" eval="(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+          <field name="appointment_time">11:00</field>
+          <field name="examination_fees">200.0</field>
+          <field name="duration">45</field>
+          <field name="state">available</field>
+          <field name="is_available">True</field>
+      </record>
+
+      <!-- Demo Patients -->
+      <record id="demo_patient_1" model="health.patient">
+          <field name="name">خالد عبدالرحمن السلمي</field>
+          <field name="phone">0551234567</field>
+          <field name="email">khaled.demo@health.local</field>
+          <field name="birthdate">1985-04-12</field>
+          <field name="gender">male</field>
+          <field name="national_id">1234567890</field>
+          <field name="blood_type">o+</field>
+      </record>
+      <record id="demo_patient_2" model="health.patient">
+          <field name="name">فاطمة علي الحربي</field>
+          <field name="phone">0559876543</field>
+          <field name="email">fatima.demo@health.local</field>
+          <field name="birthdate">1992-09-25</field>
+          <field name="gender">female</field>
+          <field name="national_id">2345678901</field>
+          <field name="blood_type">a+</field>
+      </record>
+
+      <!-- Demo Bookings: visit data now lives here, not on the patient master record. -->
+      <record id="demo_booking_1" model="health.booking">
+          <field name="patient_id" ref="demo_patient_1"/>
+          <field name="visit_type">new</field>
+          <field name="clinic_id" ref="health_center_management.clinic_ent"/>
+          <field name="appointment_id" ref="demo_appt_ent_1"/>
+          <field name="doctor_id" ref="demo_doctor_ent"/>
+          <field name="state">draft</field>
+      </record>
+      <record id="demo_booking_2" model="health.booking">
+          <field name="patient_id" ref="demo_patient_2"/>
+          <field name="visit_type">new</field>
+          <field name="clinic_id" ref="health_center_management.clinic_internal"/>
+          <field name="appointment_id" ref="demo_appt_internal_1"/>
+          <field name="doctor_id" ref="demo_doctor_internal"/>
+          <field name="state">draft</field>
+      </record>
+
+  </odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_lab_test_type_list" model="ir.ui.view">
+        <field name="name">health.lab.test.type.list</field>
+        <field name="model">health.lab.test.type</field>
+        <field name="arch" type="xml">
+            <list string="Lab Test Types / أنواع فحوصات المختبر">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="name_ar"/>
+                <field name="category" widget="badge"/>
+                <field name="active" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_health_lab_test_type_form" model="ir.ui.view">
+        <field name="name">health.lab.test.type.form</field>
+        <field name="model">health.lab.test.type</field>
+        <field name="arch" type="xml">
+            <form string="Lab Test Type / نوع فحص المختبر">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_ar"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="category"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_health_lab_test_type" model="ir.actions.act_window">
+        <field name="name">Lab Test Types / أنواع الفحوصات</field>
+        <field name="res_model">health.lab.test.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

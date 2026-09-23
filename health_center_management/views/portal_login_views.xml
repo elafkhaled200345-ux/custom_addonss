@@ -1,170 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <record id="view_health_portal_login_form" model="ir.ui.view">
+        <field name="name">health.portal.login.form</field>
+        <field name="model">health.portal.login</field>
+        <field name="arch" type="xml">
+            <form string="Portal Login / دخول البوابة">
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2>🔐 Portal Login / دخول البوابة</h2>
+                        <p class="text-muted">
+                            Select portal type and enter your password to continue.
+                        </p>
+                    </div>
+                    <group>
+                        <field name="portal_type" widget="radio"/>
+                        <field name="doctor_id"
+                               invisible="portal_type != 'doctor'"
+                               required="portal_type == 'doctor'"/>
+                        <field name="employee_id"
+                               invisible="portal_type != 'employee'"/>
+                        <field name="password" password="True"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_verify" string="🔑 Login / دخول"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel / إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <!-- Portal Config Views -->
-        <record id="view_health_portal_config_form" model="ir.ui.view">
-            <field name="name">health.portal.config.form</field>
-            <field name="model">health.portal.config</field>
-            <field name="arch" type="xml">
-                <form string="Portal Access Configuration">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name"/></h1>
-                        </div>
-                        <group>
-                            <group string="Employee Portal">
-                                <field name="employee_portal_password"
-                                       string="Employee Portal Password"
-                                       password="True"/>
-                            </group>
-                            <group string="Doctor Portal">
-                                <field name="manager_portal_password"
-                                       string="Doctor Portal (Legacy) Password"
-                                       password="True"/>
-                            </group>
-                        </group>
-                        <div class="alert alert-info" role="alert">
-                            <strong>Note:</strong>
-                            The Employee Portal password protects the employee section.
-                            Each doctor now has their own individual password set in
-                            <strong>Manage Doctors</strong>.
-                            Default employee password is <strong>1234</strong>.
-                        </div>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+    <record id="action_employee_portal_login" model="ir.actions.act_window">
+        <field name="name">Employee Portal / بوابة الموظف</field>
+        <field name="res_model">health.portal.login</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_health_portal_login_form"/>
+        <field name="context">{'default_portal_type': 'employee'}</field>
+        <field name="target">new</field>
+    </record>
 
-        <record id="view_health_portal_config_list" model="ir.ui.view">
-            <field name="name">health.portal.config.list</field>
-            <field name="model">health.portal.config</field>
-            <field name="arch" type="xml">
-                <list string="Portal Configuration" create="0" delete="0">
-                    <field name="name" string="Configuration"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="action_health_portal_config" model="ir.actions.act_window">
-            <field name="name">Portal Access Passwords</field>
-            <field name="res_model">health.portal.config</field>
-            <field name="view_mode">list,form</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL LOGIN WIZARD
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_portal_login_employee" model="ir.ui.view">
-            <field name="name">health.portal.login.employee</field>
-            <field name="model">health.portal.login</field>
-            <field name="arch" type="xml">
-                <form string="Employee Portal — Login">
-                    <field name="portal_type" invisible="1"/>
-                    <field name="doctor_id" invisible="1"/>
-                    <sheet>
-                        <div class="text-center mb-4">
-                            <h2 style="color: #2E86AB;">
-                                <i class="fa fa-lock"/> Employee Portal
-                            </h2>
-                            <p class="text-muted">
-                                Enter the password to access the Employee Portal
-                            </p>
-                        </div>
-                        <group>
-                            <field name="password"
-                                   string="Password"
-                                   password="True"
-                                   placeholder="Enter password..."/>
-                        </group>
-                    </sheet>
-                    <footer>
-                        <button name="action_verify"
-                                string="Login"
-                                type="object"
-                                class="btn-primary"/>
-                        <button string="Cancel"
-                                class="btn-secondary"
-                                special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             DOCTOR PORTAL LOGIN WIZARD — per-doctor password
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_portal_login_doctor" model="ir.ui.view">
-            <field name="name">health.portal.login.doctor</field>
-            <field name="model">health.portal.login</field>
-            <field name="arch" type="xml">
-                <form string="Doctor Portal — Login">
-                    <field name="portal_type" invisible="1"/>
-                    <sheet>
-                        <div class="text-center mb-4"
-                             style="padding:18px; background:linear-gradient(135deg,#1a6e3c,#0f4a28); border-radius:10px; color:white;">
-                            <h2 style="color:white;">
-                                <i class="fa fa-user-md"/> Doctor Portal
-                            </h2>
-                            <p style="color:#c8ecd8; margin:0;">
-                                Select your name and enter your personal password
-                            </p>
-                        </div>
-                        <group>
-                            <field name="doctor_id"
-                                   string="Doctor Name"
-                                   placeholder="Select your name..."
-                                   options="{'no_create': True, 'no_open': True}"/>
-                            <field name="password"
-                                   string="Password"
-                                   password="True"
-                                   placeholder="Enter your personal password..."/>
-                        </group>
-                        <div class="alert alert-info" role="alert" style="margin-top:8px;">
-                            <i class="fa fa-info-circle"/>
-                            <strong> Note:</strong>
-                            Your personal password is set by the employee in
-                            <strong>Manage Doctors</strong>.
-                            After login, you will only see patients from your clinic.
-                        </div>
-                    </sheet>
-                    <footer>
-                        <button name="action_verify"
-                                string="Login"
-                                type="object"
-                                class="btn-primary"/>
-                        <button string="Cancel"
-                                class="btn-secondary"
-                                special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <!-- Action: Open Employee Portal Login Wizard -->
-        <record id="action_employee_portal_login" model="ir.actions.act_window">
-            <field name="name">Employee Portal — Login</field>
-            <field name="res_model">health.portal.login</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_health_portal_login_employee"/>
-            <field name="target">new</field>
-            <field name="context">{'default_portal_type': 'employee'}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-        <!-- Action: Open Doctor Portal Login Wizard -->
-        <record id="action_doctor_portal_login" model="ir.actions.act_window">
-            <field name="name">Doctor Portal — Login</field>
-            <field name="res_model">health.portal.login</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_health_portal_login_doctor"/>
-            <field name="target">new</field>
-            <field name="context">{'default_portal_type': 'doctor'}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_doctor'))]"/>
-        </record>
-
-    </data>
+    <record id="action_doctor_portal_login" model="ir.actions.act_window">
+        <field name="name">Doctor Portal / بوابة الطبيب</field>
+        <field name="res_model">health.portal.login</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_health_portal_login_form"/>
+        <field name="context">{'default_portal_type': 'doctor'}</field>
+        <field name="target">new</field>
+    </record>
 </odoo>

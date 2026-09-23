@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_lab_request_list" model="ir.ui.view">
+        <field name="name">health.lab.request.list</field>
+        <field name="model">health.lab.request</field>
+        <field name="arch" type="xml">
+            <list string="Lab Requests / طلبات المختبر" default_order="id desc">
+                <field name="name"/>
+                <field name="patient_name"/>
+                <field name="age"/>
+                <field name="doctor_id"/>
+                <field name="clinic_id"/>
+                <field name="request_date"/>
+                <field name="priority" widget="badge"/>
+                <field name="line_count" string="Tests #"/>
+                <field name="state" widget="badge"
+                       decoration-muted="state == 'draft'"
+                       decoration-warning="state == 'sent'"
+                       decoration-info="state == 'partial'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_health_lab_request_form" model="ir.ui.view">
+        <field name="name">health.lab.request.form</field>
+        <field name="model">health.lab.request</field>
+        <field name="arch" type="xml">
+            <form string="Lab Test Request / طلب فحص مختبر">
+                <header>
+                    <button name="action_send_to_lab" string="✉ Send to Lab / إرسال"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_mark_done" string="✔ Mark Complete / اعتماد"
+                            type="object" class="btn-success"
+                            invisible="state in ('done', 'cancelled')"/>
+                    <button name="action_print_lab_request" string="🖨 Print / طباعة"
+                            type="object"/>
+                    <button name="action_cancel" string="✖ Cancel / إلغاء"
+                            type="object" class="btn-danger"
+                            invisible="state in ('done', 'cancelled')"
+                            confirm="Cancel this lab request?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,sent,partial,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Patient / المريض">
+                            <field name="patient_id"/>
+                            <field name="patient_name" readonly="1"/>
+                            <field name="age" readonly="1"/>
+                            <field name="medical_record_id"/>
+                        </group>
+                        <group string="Request Info / معلومات الطلب">
+                            <field name="doctor_id"/>
+                            <field name="clinic_id"/>
+                            <field name="request_date"/>
+                            <field name="priority"/>
+                            <field name="diagnosis"/>
+                            <field name="collected_date"/>
+                            <field name="result_date" readonly="1"/>
+                            <field name="approved_by" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Tests / الفحوصات المطلوبة">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="test_type_id"
+                                           domain="[('active', '=', True)]"/>
+                                    <field name="test_category" readonly="1"/>
+                                    <field name="normal_range"/>
+                                    <field name="unit"/>
+                                    <field name="result"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Clinical Notes / ملاحظات سريرية">
+                            <group>
+                                <group>
+                                    <field name="case_of"/>
+                                    <field name="on_medication"/>
+                                    <field name="chief_complaint"/>
+                                    <field name="for_purpose"/>
+                                </group>
+                                <group>
+                                    <field name="additional_notes"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_health_lab_request" model="ir.actions.act_window">
+        <field name="name">Lab Requests / طلبات المختبر</field>
+        <field name="res_model">health.lab.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_health_laboratory" model="ir.actions.act_window">
+        <field name="name">Laboratory / المختبر</field>
+        <field name="res_model">health.lab.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ('sent', 'partial'))]</field>
+    </record>
+</odoo>

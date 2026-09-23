@@ -1,201 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- List -->
+    <record id="view_health_clinic_list" model="ir.ui.view">
+        <field name="name">health.clinic.list</field>
+        <field name="model">health.clinic</field>
+        <field name="arch" type="xml">
+            <list string="Clinics / العيادات" default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="specialty"/>
+                <field name="phone"/>
+                <field name="doctor_count" string="Doctors"/>
+                <field name="appointment_count" string="Appointments"/>
+                <field name="status_label" string="Status Today"/>
+                <field name="active" optional="show"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             HEALTH CENTER ROOT — Today's Available Clinics (Read Only)
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_center_home_list" model="ir.ui.view">
-            <field name="name">health.clinic.list.home</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <list string="Available Clinics Today" create="0" delete="0" edit="0">
-                    <field name="name_display" string="Clinic Name"/>
-                    <field name="status_label" string="Status Today"
-                           decoration-success="status == True"
-                           decoration-danger="status == False"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_center_home_form" model="ir.ui.view">
-            <field name="name">health.clinic.form.home</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <form string="Clinic" create="false" delete="false">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name_display" readonly="1"/></h1>
+    <!-- Kanban -->
+    <record id="view_health_clinic_kanban" model="ir.ui.view">
+        <field name="name">health.clinic.kanban</field>
+        <field name="model">health.clinic</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_order="sequence">
+                <field name="name"/>
+                <field name="specialty"/>
+                <field name="status"/>
+                <field name="status_label"/>
+                <field name="doctor_count"/>
+                <field name="appointment_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="o_secondary text-muted">
+                                        <field name="specialty"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_button_section">
+                                    <span t-att-class="record.status.raw_value ? 'badge bg-success' : 'badge bg-danger'">
+                                        <field name="status_label"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content row mt-2">
+                                <div class="col-6 text-center">
+                                    <strong><field name="doctor_count"/></strong>
+                                    <br/><small class="text-muted">Doctors</small>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <strong><field name="appointment_count"/></strong>
+                                    <br/><small class="text-muted">Appts</small>
+                                </div>
+                            </div>
                         </div>
-                        <group>
-                            <group string="Clinic Information">
-                                <field name="name" string="Clinic" readonly="1"/>
-                                <field name="status_label" string="Status" readonly="1"/>
-                            </group>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_health_clinic_form" model="ir.ui.view">
+        <field name="name">health.clinic.form</field>
+        <field name="model">health.clinic</field>
+        <field name="arch" type="xml">
+            <form string="Clinic / عيادة">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Clinic Name / اسم العيادة"/></h1>
+                        <h3 class="text-muted"><field name="specialty" placeholder="Specialty / التخصص"/></h3>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_appointments" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="appointment_count" widget="statinfo" string="Appointments"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-user-md"
+                                type="object" name="action_view_doctors">
+                            <field name="doctor_count" widget="statinfo" string="Doctors"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Contact / التواصل">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="location"/>
                         </group>
-                        <notebook>
-                            <page string="Today's Appointments">
-                                <field name="appointment_ids"
-                                       domain="[('appointment_date', '=', context_today()), ('is_available', '=', True)]"
-                                       readonly="1">
-                                    <list>
-                                        <field name="appointment_time" string="Time"/>
-                                        <field name="is_available" string="Available"/>
-                                    </list>
-                                </field>
-                            </page>
-                            <page string="Doctors">
-                                <field name="doctor_ids" readonly="1">
-                                    <list>
-                                        <field name="name" string="Doctor Name"/>
-                                    </list>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="action_health_center_home" model="ir.actions.act_window">
-            <field name="name">Available Clinics Today</field>
-            <field name="res_model">health.clinic</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_center_home_list')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_center_home_form')}),
-            ]"/>
-            <field name="domain">[('status', '=', True)]</field>
-            <field name="context">{'create': False}</field>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════
-             PATIENT PORTAL — Clinics (Read Only)
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_clinic_tree" model="ir.ui.view">
-            <field name="name">health.clinic.list.patient</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <list string="Clinics" create="0" delete="0">
-                    <field name="name_display" string="Clinic Name"/>
-                    <field name="status_label" string="Status"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_clinic_form_patient" model="ir.ui.view">
-            <field name="name">health.clinic.form.patient</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <form string="Clinic" create="false" delete="false">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name_display" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Clinic Information">
-                                <field name="name" string="Clinic" readonly="1"/>
-                                <field name="status_label" string="Status" readonly="1"/>
-                            </group>
+                        <group string="Status / الحالة">
+                            <field name="status_label" string="Today's Status"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                    </group>
+                    <notebook>
+                        <page string="Doctors / الأطباء">
+                            <field name="doctor_ids" context="{'default_clinic_id': id}">
+                                <list>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="speciality"/>
+                                    <field name="consultation_fee"/>
+                                    <field name="phone"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_health_clinic_patient" model="ir.actions.act_window">
-            <field name="name">Clinics</field>
-            <field name="res_model">health.clinic</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_clinic_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_clinic_form_patient')}),
-            ]"/>
-            <field name="context">{'create': False}</field>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_patient'))]"/>
-        </record>
+    <!-- Patient-facing (read only) -->
+    <record id="view_health_clinic_patient_list" model="ir.ui.view">
+        <field name="name">health.clinic.list.patient</field>
+        <field name="model">health.clinic</field>
+        <field name="arch" type="xml">
+            <list string="Available Clinics / العيادات المتاحة" create="0" delete="0" edit="0">
+                <field name="name" string="Clinic / العيادة"/>
+                <field name="specialty" string="Specialty / التخصص"/>
+                <field name="status_label" string="Status Today / حالة اليوم"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL — Manage Clinics (Full Edit + Save Confirm)
-        ══════════════════════════════════════════════════════ -->
+    <record id="action_health_clinic" model="ir.actions.act_window">
+        <field name="name">Clinics / العيادات</field>
+        <field name="res_model">health.clinic</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
 
-        <record id="view_health_clinic_tree_editable" model="ir.ui.view">
-            <field name="name">health.clinic.list.editable</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <list string="Clinics">
-                    <field name="sequence" string="Order"/>
-                    <field name="name" string="Clinic Type"/>
-                    <field name="name_display" string="Clinic Name" readonly="1"/>
-                    <field name="status_label" string="Status Today" readonly="1"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_clinic_form" model="ir.ui.view">
-            <field name="name">health.clinic.form</field>
-            <field name="model">health.clinic</field>
-            <field name="arch" type="xml">
-                <form string="Clinic">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name_display" readonly="1"/></h1>
-                        </div>
-                        <group>
-                            <group string="Clinic Information">
-                                <field name="name" string="Clinic Type"/>
-                                <field name="sequence" string="Display Order"/>
-                                <field name="status_label" string="Status Today" readonly="1"/>
-                            </group>
-                        </group>
-                        <notebook>
-                            <page string="Appointments">
-                                <field name="appointment_ids" editable="bottom">
-                                    <list>
-                                        <field name="appointment_date" string="Date"/>
-                                        <field name="appointment_time" string="Time"/>
-                                        <field name="is_available" string="Available" widget="boolean_toggle"/>
-                                        <field name="patient_id" string="Booked Patient" readonly="1" optional="show"/>
-                                    </list>
-                                </field>
-                            </page>
-                            <page string="Doctors">
-                                <field name="doctor_ids" editable="bottom">
-                                    <list>
-                                        <field name="name" string="Doctor Name"/>
-                                        <field name="password" string="Password" password="True"/>
-                                    </list>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="action_health_clinic_employee" model="ir.actions.act_window">
-            <field name="name">Manage Clinics</field>
-            <field name="res_model">health.clinic</field>
-            <field name="view_mode">list,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'list', 'view_id': ref('view_health_clinic_tree_editable')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_health_clinic_form')}),
-            ]"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-    </data>
+    <record id="action_health_clinic_patient" model="ir.actions.act_window">
+        <field name="name">Available Clinics / العيادات المتاحة</field>
+        <field name="res_model">health.clinic</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+    </record>
 </odoo>

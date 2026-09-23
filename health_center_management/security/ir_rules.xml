@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <odoo>
+      <!-- ═══════════════════════════════════════════════════════════════
+           RECORD RULES
+           ─ Patient    → يرى بياناته الخاصة فقط (عبر user_id)
+           ─ Doctor     → يرى بيانات مرضاه فقط  (عبر doctor_id.user_id)
+           ─ Employee   → يرى كل شيء            (domain_force: [(1,'=',1)])
+           التسلسل الهرمي: Employee ← Doctor ← Patient
+           عند تقييم ir.rules يُطبَّق OR على جميع rules المجموعات.
+           الموظف (employee) يرث Doctor، فتُطبَّق عليه employee_all → يرى الكل.
+           الطبيب (doctor فقط، غير موظف) تُطبَّق عليه doctor_own فقط.
+           شرط: يجب ربط الطبيب بـ user_id في سجله قبل تفعيل قواعد الطبيب.
+      ═══════════════════════════════════════════════════════════════ -->
+
+      <!-- ─────────────────────────────────────────────────────────────
+           PATIENT RULES — المريض يرى بياناته فقط (via user_id)
+      ───────────────────────────────────────────────────────────────── -->
+
+      <!-- health.patient -->
+      <record id="rule_health_patient_own" model="ir.rule">
+          <field name="name">Patient: own record only</field>
+          <field name="model_id" ref="model_health_patient"/>
+          <field name="domain_force">[('user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="True"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_patient_employee_all" model="ir.rule">
+          <field name="name">Employee/Doctor: all patient records</field>
+          <field name="model_id" ref="model_health_patient"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- health.medical.record -->
+      <record id="rule_health_medical_record_own" model="ir.rule">
+          <field name="name">Patient: own medical records only</field>
+          <field name="model_id" ref="model_health_medical_record"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="False"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_medical_record_employee_all" model="ir.rule">
+          <field name="name">Employee/Doctor: all medical records</field>
+          <field name="model_id" ref="model_health_medical_record"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- health.invoice -->
+      <record id="rule_health_invoice_own" model="ir.rule">
+          <field name="name">Patient: own invoices only</field>
+          <field name="model_id" ref="model_health_invoice"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="False"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_invoice_employee_all" model="ir.rule">
+          <field name="name">Employee: all invoices</field>
+          <field name="model_id" ref="model_health_invoice"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- health.examination -->
+      <record id="rule_health_examination_own" model="ir.rule">
+          <field name="name">Patient: own examinations only</field>
+          <field name="model_id" ref="model_health_examination"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="False"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_examination_employee_all" model="ir.rule">
+          <field name="name">Employee/Doctor: all examinations</field>
+          <field name="model_id" ref="model_health_examination"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- health.booking -->
+      <record id="rule_health_booking_own" model="ir.rule">
+          <field name="name">Patient: own bookings only</field>
+          <field name="model_id" ref="model_health_booking"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="True"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_booking_employee_all" model="ir.rule">
+          <field name="name">Employee: all bookings</field>
+          <field name="model_id" ref="model_health_booking"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- health.lab.request — كانت مفقودة تماماً في النسخة السابقة! -->
+      <record id="rule_health_lab_request_own" model="ir.rule">
+          <field name="name">Patient: own lab requests only</field>
+          <field name="model_id" ref="model_health_lab_request"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="False"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+      <record id="rule_health_lab_request_employee_all" model="ir.rule">
+          <field name="name">Employee/Doctor: all lab requests</field>
+          <field name="model_id" ref="model_health_lab_request"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+      <!-- ─────────────────────────────────────────────────────────────
+           DOCTOR RULES — الطبيب يرى بيانات مرضاه فقط (doctor_id.user_id)
+           هذه القواعد تنطبق على group_health_doctor فقط.
+           الموظف (employee) يرث doctor، لكن employee_all تطغى بـ OR → يرى الكل.
+           شرط: يجب ربط الطبيب بـ user_id من Health Center → Doctors → System User.
+      ───────────────────────────────────────────────────────────────── -->
+
+      <!-- health.patient: الطبيب يرى المرضى المرتبطين بمواعيده -->
+      <record id="rule_health_patient_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own patients only</field>
+          <field name="model_id" ref="model_health_patient"/>
+          <field name="domain_force">[('booking_ids.doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+
+      <!-- health.medical.record: الطبيب يرى السجلات الطبية لمرضاه -->
+      <record id="rule_health_medical_record_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own medical records only</field>
+          <field name="model_id" ref="model_health_medical_record"/>
+          <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="True"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+
+      <!-- health.examination: الطبيب يرى فحوصات مرضاه -->
+      <record id="rule_health_examination_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own examinations only</field>
+          <field name="model_id" ref="model_health_examination"/>
+          <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="True"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+
+      <!-- health.lab.request: الطبيب يرى طلبات مختبر مرضاه -->
+      <record id="rule_health_lab_request_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own lab requests only</field>
+          <field name="model_id" ref="model_health_lab_request"/>
+          <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="True"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+
+      <!-- health.appointment: الطبيب يرى مواعيده فقط -->
+      <record id="rule_health_appointment_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own appointments only</field>
+          <field name="model_id" ref="model_health_appointment"/>
+          <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+          <field name="perm_read" eval="True"/>
+          <field name="perm_write" eval="True"/>
+          <field name="perm_create" eval="False"/>
+          <field name="perm_unlink" eval="False"/>
+      </record>
+
+
+      <!-- health.prescription -->
+      <record id="rule_health_prescription_patient_own" model="ir.rule">
+          <field name="name">Patient: own prescriptions only</field>
+          <field name="model_id" ref="model_health_prescription"/>
+          <field name="domain_force">[('patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+      </record>
+      <record id="rule_health_prescription_line_patient_own" model="ir.rule">
+          <field name="name">Patient: own prescription lines only</field>
+          <field name="model_id" ref="model_health_prescription_line"/>
+          <field name="domain_force">[('prescription_id.patient_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_patient'))]"/>
+      </record>
+      <record id="rule_health_prescription_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own prescriptions only</field>
+          <field name="model_id" ref="model_health_prescription"/>
+          <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+      </record>
+      <record id="rule_health_prescription_line_doctor_own" model="ir.rule">
+          <field name="name">Doctor: own prescription lines only</field>
+          <field name="model_id" ref="model_health_prescription_line"/>
+          <field name="domain_force">[('prescription_id.doctor_id.user_id', '=', user.id)]</field>
+          <field name="groups" eval="[(4, ref('group_health_doctor'))]"/>
+      </record>
+      <record id="rule_health_prescription_employee_all" model="ir.rule">
+          <field name="name">Employee: all prescriptions</field>
+          <field name="model_id" ref="model_health_prescription"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+      <record id="rule_health_prescription_line_employee_all" model="ir.rule">
+          <field name="name">Employee: all prescription lines</field>
+          <field name="model_id" ref="model_health_prescription_line"/>
+          <field name="domain_force">[(1, '=', 1)]</field>
+          <field name="groups" eval="[(4, ref('group_health_employee'))]"/>
+      </record>
+
+  </odoo>

@@ -1,171 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- Login form -->
+    <record id="view_health_report_portal_login_form" model="ir.ui.view">
+        <field name="name">health.report.portal.login.form</field>
+        <field name="model">health.report.portal.login</field>
+        <field name="arch" type="xml">
+            <form string="Reports Portal / بوابة التقارير">
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2>📊 Reports Portal / بوابة التقارير</h2>
+                        <p class="text-muted">
+                            أدخل كلمة المرور للوصول إلى التقارير
+                        </p>
+                    </div>
+                    <group>
+                        <field name="password" password="True"
+                               placeholder="كلمة المرور / Password"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_verify" string="🔑 Login / دخول"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel / إلغاء" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════════════
-             REPORT PORTAL LOGIN — Password Wizard
-        ══════════════════════════════════════════════════════════════ -->
-
-        <record id="view_health_report_portal_login_form" model="ir.ui.view">
-            <field name="name">health.report.portal.login.form</field>
-            <field name="model">health.report.portal.login</field>
-            <field name="arch" type="xml">
-                <form string="Reports Portal — Login">
-                    <sheet>
-                        <div class="text-center mb-4">
-                            <h2 style="color:#2E86AB;">
-                                <i class="fa fa-file-pdf-o"/> Reports Portal
-                            </h2>
-                            <p class="text-muted">
-                                Enter your password to access system reports
-                            </p>
+    <!-- Reports Hub form -->
+    <record id="view_health_report_hub_form" model="ir.ui.view">
+        <field name="name">health.report.hub.form</field>
+        <field name="model">health.report.hub</field>
+        <field name="arch" type="xml">
+            <form string="Reports Hub / مركز التقارير"
+                  create="false" delete="false">
+                <sheet>
+                    <div class="text-center mb-4">
+                        <h2>📊 Reports Hub / مركز التقارير</h2>
+                        <p class="text-muted">اختر نوع التقرير ثم اضغط عرض أو طباعة</p>
+                    </div>
+                    <group>
+                        <field name="report_type" widget="radio"/>
+                    </group>
+                    <div class="row mt-4 text-center">
+                        <div class="col-6">
+                            <button name="action_open_list" type="object"
+                                    class="btn btn-primary btn-lg w-100 py-3">
+                                <i class="fa fa-list fa-lg d-block mb-1"/>
+                                📋 View Records / عرض السجلات
+                            </button>
                         </div>
-                        <group>
-                            <field name="portal_type" string="Login As"/>
-                            <field name="password"
-                                   string="Password"
-                                   password="True"
-                                   placeholder="Enter password..."/>
-                        </group>
-                    </sheet>
-                    <footer>
-                        <button name="action_login"
-                                string="Login"
-                                type="object"
-                                class="btn-primary"/>
-                        <button string="Cancel"
-                                class="btn-secondary"
-                                special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <record id="action_health_report_portal_login" model="ir.actions.act_window">
-            <field name="name">Reports Portal — Login</field>
-            <field name="res_model">health.report.portal.login</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_health_report_portal_login_form"/>
-            <field name="target">new</field>
-            <field name="groups_id" eval="[
-                (4, ref('health_center_management.group_health_employee')),
-                (4, ref('health_center_management.group_health_doctor')),
-            ]"/>
-        </record>
-
-        <!-- ══════════════════════════════════════════════════════════════
-             REPORT HUB — Dashboard with all report print buttons
-        ══════════════════════════════════════════════════════════════ -->
-
-        <record id="view_health_report_hub_form" model="ir.ui.view">
-            <field name="name">health.report.hub.form</field>
-            <field name="model">health.report.hub</field>
-            <field name="arch" type="xml">
-                <form string="Reports Portal" create="false" edit="false" delete="false">
-                    <sheet>
-                        <div class="text-center mb-4" style="padding:20px; background:linear-gradient(135deg,#2E86AB,#1a5f80); border-radius:10px; color:white;">
-                            <h1 style="color:white; font-size:2em;"><i class="fa fa-check-circle"/> Access Granted</h1>
-                            <h3 style="color:#d0eaf8;">Reports Portal</h3>
-                            <p style="color:#b0d8f0;">Select the report you want to print</p>
+                        <div class="col-6">
+                            <button name="action_print_pdf" type="object"
+                                    class="btn btn-success btn-lg w-100 py-3">
+                                <i class="fa fa-print fa-lg d-block mb-1"/>
+                                🖨️ Print PDF / طباعة PDF
+                            </button>
                         </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
-                        <div class="row mt-4">
-
-                            <!-- Column 1: Patient &amp; Booking -->
-                            <div class="col-md-6 mb-3">
-                                <div style="border:2px solid #2E86AB; border-radius:8px; padding:15px;">
-                                    <h4 style="color:#2E86AB; border-bottom:1px solid #2E86AB; padding-bottom:8px;">
-                                        <i class="fa fa-users"/> Patient &amp; Booking Management
-                                    </h4>
-                                    <div class="d-flex flex-column gap-2">
-                                        <button name="action_print_patient_list"
-                                                type="object"
-                                                class="btn btn-primary mb-2"
-                                                style="text-align:left;">
-                                            <i class="fa fa-print"/> Print Patient List
-                                        </button>
-                                        <button name="action_print_booking_list"
-                                                type="object"
-                                                class="btn btn-primary mb-2"
-                                                style="text-align:left;">
-                                            <i class="fa fa-print"/> Print Booking List
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Column 2: Clinics &amp; Appointments -->
-                            <div class="col-md-6 mb-3">
-                                <div style="border:2px solid #28a745; border-radius:8px; padding:15px;">
-                                    <h4 style="color:#28a745; border-bottom:1px solid #28a745; padding-bottom:8px;">
-                                        <i class="fa fa-hospital-o"/> Clinics &amp; Appointments
-                                    </h4>
-                                    <div class="d-flex flex-column gap-2">
-                                        <button name="action_print_clinic_schedule"
-                                                type="object"
-                                                class="btn btn-success mb-2"
-                                                style="text-align:left;">
-                                            <i class="fa fa-print"/> Print Clinic Schedule
-                                        </button>
-                                        <button name="action_print_appointment_schedule"
-                                                type="object"
-                                                class="btn btn-success mb-2"
-                                                style="text-align:left;">
-                                            <i class="fa fa-print"/> Print Appointment Schedule
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Column 3: Medical Records -->
-                            <div class="col-md-6 mb-3">
-                                <div style="border:2px solid #fd7e14; border-radius:8px; padding:15px;">
-                                    <h4 style="color:#fd7e14; border-bottom:1px solid #fd7e14; padding-bottom:8px;">
-                                        <i class="fa fa-file-medical"/> Medical Records &amp; Examinations
-                                    </h4>
-                                    <div class="d-flex flex-column gap-2">
-                                        <button name="action_print_medical_records"
-                                                type="object"
-                                                class="btn btn-warning mb-2"
-                                                style="text-align:left; color:white;">
-                                            <i class="fa fa-print"/> Print Medical Records
-                                        </button>
-                                        <button name="action_print_examination_list"
-                                                type="object"
-                                                class="btn btn-warning mb-2"
-                                                style="text-align:left; color:white;">
-                                            <i class="fa fa-print"/> Print Examination List
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Column 4: Doctors -->
-                            <div class="col-md-6 mb-3">
-                                <div style="border:2px solid #6f42c1; border-radius:8px; padding:15px;">
-                                    <h4 style="color:#6f42c1; border-bottom:1px solid #6f42c1; padding-bottom:8px;">
-                                        <i class="fa fa-user-md"/> Doctors
-                                    </h4>
-                                    <div class="d-flex flex-column gap-2">
-                                        <button name="action_print_doctor_list"
-                                                type="object"
-                                                class="btn mb-2"
-                                                style="text-align:left; background:#6f42c1; color:white;">
-                                            <i class="fa fa-print"/> Print Doctor List
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="text-center mt-3" style="color:#888; font-size:12px;">
-                            <i class="fa fa-info-circle"/> All reports are printed in PDF format
-                        </div>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-    </data>
+    <record id="action_health_report_portal_login" model="ir.actions.act_window">
+        <field name="name">Reports Portal / بوابة التقارير</field>
+        <field name="res_model">health.report.portal.login</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>

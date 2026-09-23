@@ -1,85 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+    <!-- List -->
+    <record id="view_health_doctor_list" model="ir.ui.view">
+        <field name="name">health.doctor.list</field>
+        <field name="model">health.doctor</field>
+        <field name="arch" type="xml">
+            <list string="Doctors / الأطباء" default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="speciality"/>
+                <field name="clinic_id"/>
+                <field name="consultation_fee" string="Fee (SAR)"/>
+                <field name="phone"/>
+                <field name="active" optional="show"/>
+            </list>
+        </field>
+    </record>
 
-        <!-- ══════════════════════════════════════════════════════
-             EMPLOYEE PORTAL — Manage Doctors (Full Edit + Save Confirm)
-        ══════════════════════════════════════════════════════ -->
-
-        <record id="view_health_doctor_tree" model="ir.ui.view">
-            <field name="name">health.doctor.list</field>
-            <field name="model">health.doctor</field>
-            <field name="arch" type="xml">
-                <list string="Doctors">
-                    <field name="sequence" string="Order" optional="show"/>
-                    <field name="name" string="Doctor Name"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <field name="clinic_name" string="Clinic Name" optional="show"/>
-                    <field name="active" string="Active" widget="boolean_toggle"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_health_doctor_form" model="ir.ui.view">
-            <field name="name">health.doctor.form</field>
-            <field name="model">health.doctor</field>
-            <field name="arch" type="xml">
-                <form string="Doctor">
-                    <header>
-                        <button name="action_save_confirm"
-                                string="✔ Save &amp; Confirm"
-                                type="object"
-                                class="btn-primary"
-                                data-hotkey="s"/>
-                        <button string="Discard Changes"
-                                class="btn-secondary"
-                                special="cancel"
-                                confirm="Are you sure you want to discard changes? All unsaved data will be lost."/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" placeholder="Doctor Name"/></h1>
-                        </div>
-                        <group>
-                            <group string="Doctor Information">
-                                <field name="clinic_id" string="Clinic"/>
-                                <field name="clinic_name" string="Clinic Name" readonly="1"/>
-                                <field name="sequence" string="Display Order"/>
-                                <field name="active" string="Active"/>
-                            </group>
-                            <group string="Login Credentials">
-                                <field name="password" string="Password" password="True"
-                                       placeholder="Enter doctor password..."/>
-                            </group>
+    <!-- Form -->
+    <record id="view_health_doctor_form" model="ir.ui.view">
+        <field name="name">health.doctor.form</field>
+        <field name="model">health.doctor</field>
+        <field name="arch" type="xml">
+            <form string="Doctor / طبيب">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_appointments" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="appointment_count" widget="statinfo" string="Appointments"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>Dr. <field name="name" placeholder="Doctor Name / اسم الطبيب"/></h1>
+                        <h3 class="text-muted"><field name="speciality" placeholder="Speciality / التخصص"/></h3>
+                    </div>
+                    <group>
+                        <group string="Professional Info / المعلومات المهنية">
+                            <field name="clinic_id"/>
+                            <field name="consultation_fee"/>
+                            <field name="sequence"/>
+                            <field name="active"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_health_doctor_search" model="ir.ui.view">
-            <field name="name">health.doctor.search</field>
-            <field name="model">health.doctor</field>
-            <field name="arch" type="xml">
-                <search string="Search Doctors">
-                    <field name="name" string="Doctor Name"/>
-                    <field name="clinic_id" string="Clinic"/>
-                    <filter name="active" string="Active" domain="[('active', '=', True)]"/>
-                    <group expand="0" string="Group By">
-                        <filter name="group_clinic" string="Clinic"
-                                context="{'group_by': 'clinic_id'}"/>
+                        <group string="Contact / التواصل">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="user_id"/>
+                        </group>
                     </group>
-                </search>
-            </field>
-        </record>
+                    <!-- Password section — visible to employees only -->
+                    <group string="Portal Password / كلمة مرور البوابة"
+                           groups="health_center_management.group_health_employee">
+                        <field name="password_set"
+                               string="Set New Password / تعيين كلمة مرور جديدة"
+                               password="True"
+                               placeholder="Leave blank to keep current password"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_health_doctor_employee" model="ir.actions.act_window">
-            <field name="name">Manage Doctors</field>
-            <field name="res_model">health.doctor</field>
-            <field name="view_mode">list,form</field>
-            <field name="search_view_id" ref="view_health_doctor_search"/>
-            <field name="groups_id" eval="[(4, ref('health_center_management.group_health_employee'))]"/>
-        </record>
-
-    </data>
+    <record id="action_health_doctor" model="ir.actions.act_window">
+        <field name="name">Doctors / الأطباء</field>
+        <field name="res_model">health.doctor</field>
+        <field name="view_mode">list,form</field>
+    </record>
 </odoo>

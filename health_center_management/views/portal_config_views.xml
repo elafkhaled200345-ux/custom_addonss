@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_health_portal_config_form" model="ir.ui.view">
+        <field name="name">health.portal.config.form</field>
+        <field name="model">health.portal.config</field>
+        <field name="arch" type="xml">
+            <form string="Portal Configuration / إعدادات البوابة">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group string="Employee Portal / بوابة الموظفين">
+                        <field name="employee_password_status" readonly="1"
+                               string="Current Status / الحالة الحالية"/>
+                        <field name="employee_password_set" password="True"
+                               placeholder="اكتب كلمة مرور جديدة لبوابة الموظفين"/>
+                    </group>
+                    <group string="Reports Portal / بوابة التقارير">
+                        <field name="reports_password_status" readonly="1"
+                               string="Current Status / الحالة الحالية"/>
+                        <field name="reports_password_set" password="True"
+                               placeholder="اكتب كلمة مرور جديدة لبوابة التقارير"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_health_portal_config_list" model="ir.ui.view">
+        <field name="name">health.portal.config.list</field>
+        <field name="model">health.portal.config</field>
+        <field name="arch" type="xml">
+            <list string="Portal Configuration">
+                <field name="name"/>
+                <field name="employee_password_status" string="Employee Password"/>
+                <field name="reports_password_status" string="Reports Password"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_health_portal_config" model="ir.actions.act_window">
+        <field name="name">Portal Configuration / إعدادات البوابة</field>
+        <field name="res_model">health.portal.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
